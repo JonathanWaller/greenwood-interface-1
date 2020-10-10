@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header > li, a {
+    font-family: "Roboto Mono", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #66676F;
+    text-decoration: none;
+}
+
+header > a > button {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1% 2%;
+    height: 10vh;
+}
+
+.logo {
+    cursor: pointer;
+    margin-right: auto
+}
+
+.nav__links {
+    list-style: none;
+}
+
+.nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+}
+
+.nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+
+.wallet-connected-dot {
+    height: 100%;
+    width: 100%;
+    background-color: #FF7957;
+    border-radius: 50%;
+    /* display: inline-block; */
+}
+
+button {
+    margin-left: 2%;
+    padding: 9px 25px;
+    background-color: rgba(255,121,87, 1);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.nav-button-go-to:hover .transx-2px-right {
+    transform: translateX(4px);
+    color: #FFFFFF;
+}
+
+.transx-2px-right {
+    color: #FF7957;
+}
+
+.nav-button-go-to {
+    min-width: 200px;
+    margin-left: 2%;
+    padding: 9px 25px;
+    background-color: #F3F4F6;
+    border: 2px solid #FF7957;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #FF7957
+}
+
+.nav-button-go-to:hover {
+    background-color: rgba(255,121,87, 1);
+    color: #FFFFFF;
+
+}
+
+.va-middle-bg-transparent {
+    vertical-align: middle;
+    background-color: transparent;
+}
+
+.connected-address {
+    font-family: "Roboto Mono", sans-serif;
+    color: #66676F;
+}
