@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.submit-btn {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 2em;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-left: 0;
+    padding: 5% 30%;
+    font-weight: 600;
+    min-width: 100%;
+    margin-top: 5%;
+    border-radius: 4px;
+}
+
+button.submit-btn-not-connected {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 1em;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-left: 0;
+    padding: 5% 30%;
+    font-weight: 300;
+    min-width: 100%;
+    margin-top: 5%;
+    border-radius: 4px;
+    background-color: #D4D5D8;
+}
+
+.swap-detail > li {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    color: #66676F
+}
+
+main {
+    padding: 1% 2%;
+    height: 80vh;
+}
+
+.detail-help-circle {
+    color: #D4D5D8; 
+    width: 1em;
+    height: 1em;
+}
+
+.swap-detail {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    width: 100%;
+    flex-basis: 1;
+}
+
+.swap-detail-label {
+    margin-right: auto;
+    font-size: 1em;
+    color: #66676F;
+}
+
+.swap-detail-value {
+    font-size: 1em;
+    color: #66676F;
+}
+
+.aligner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+.aligner-item {
+    min-width:50%;
+    height: 100%;
+}
+
+.form-span {
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 2.5em;
+    line-height: 2.5em;
+    color: #D4D5D8;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #D4D5D8;
+    opacity: 1; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #D4D5D8;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: #D4D5D8;
+  }
+
+.swap__nav__links {
+    list-style: none;
+}
+
+.swap__nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+
+.swap-select {
+    font-family: "Roboto Mono", sans-serif;
+}
+
+.form-input {
+    font-family: "Roboto Mono", sans-serif;
+}
