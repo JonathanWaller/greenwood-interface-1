@@ -84,6 +84,9 @@ class App extends React.Component {
       result: null,
       setState: this.stateUpdate,
       onConnect: this.onConnect,
+      subscribeProvider: this.subscribeProvider,
+      smartTrim: this.smartTrim,
+      getAccountAssets: this.getAccountAssets,
       selectedSwapPosition: 'rFix',
       selectedSwapAmount: '1000',
       selectedSwapAsset: 'dai',
@@ -166,6 +169,7 @@ class App extends React.Component {
       renderRoute: false
     });
     if (window.web3 && window.web3.currentProvider) {
+      console.log( 'CURRENT PROVIDER: ', window.web3.currentProvider )
       const provider = window.web3.currentProvider
       try {
         await this.subscribeProvider(provider);
@@ -202,6 +206,9 @@ class App extends React.Component {
           console.error( `Error calling getAccountAssets - ${ err.message }` );
         }
       }
+    } else {
+      console.log( 'NO PROVIDER' )
+
     }
     await this.setState({
       renderRoute: true
@@ -258,11 +265,34 @@ class App extends React.Component {
     if (!provider.on) {
       return;
     }
-    provider.on("close", () => this.resetApp());
+
+    provider.autoRefreshOnNetworkChange = false
+
+    // provider.on("close", () => this.resetApp());
 
     provider.on("accountsChanged", async (accounts) => {
+      console.log( 'ACCOUNTS CHANGED!!' )
       if ( accounts.length ) {
-        await this.setState({ address: accounts[0] });
+        const web3 = initWeb3(provider);
+        const accounts = await web3.eth.getAccounts();
+        const address = accounts[0];
+        const networkId = await web3.eth.net.getId();
+        const chainId = await web3.eth.chainId();
+        const currentAccountTruncated = this.smartTrim(address, 16) + ' '
+
+        try {
+          await this.setState({
+            web3,
+            provider,
+            connected: true,
+            address,
+            chainId,
+            networkId,
+            currentAccountTruncated
+          });
+        } catch ( err ) {
+          console.error( `Error setting state in accountsChanged listener - ${ err.message }` );
+        }
         await this.getAccountAssets();
       } else {
         this.resetApp();
@@ -272,20 +302,22 @@ class App extends React.Component {
     provider.on("chainChanged", async (chainId) => {
       const { web3 } = this.state;
       if (web3) {
+        window.location.reload();
         const networkId = await web3.eth.net.getId();
-        await this.setState({ chainId, networkId });
-        await this.getAccountAssets();
-      }
-    });
-
-    provider.on("networkChanged", async (networkId) => {
-      const { web3 } = this.state;
-      if (web3) {
         const chainId = await web3.eth.chainId();
         await this.setState({ chainId, networkId });
         await this.getAccountAssets();
       }
     });
+
+    // provider.on("networkChanged", async (networkId) => {
+    //   const { web3 } = this.state;
+    //   if (web3) {
+    //     const chainId = await web3.eth.chainId();
+    //     await this.setState({ chainId, networkId });
+    //     await this.getAccountAssets();
+    //   }
+    // });
 
     provider.on("disconnect", async (error) => {
       this.resetApp()
