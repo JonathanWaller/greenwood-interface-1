@@ -93,9 +93,9 @@ class SwapContainer extends React.Component {
     const daysInYear = 360;
 
     if (this.context.selectedSwapPosition === 'pFix') {
-      return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100).toFixed(2)) - minPayoutRate)) / daysInYear).toFixed(2)
+      return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(2)
     } else if (this.context.selectedSwapPosition === 'rFix') {
-      return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100).toFixed(2)))) / daysInYear).toFixed(2)
+      return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
     }
   }
 
