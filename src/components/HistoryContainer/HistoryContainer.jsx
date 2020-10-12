@@ -44,7 +44,7 @@ class HistoryContainer extends React.Component {
                    
                             const swap = await instance.methods.getSwap(web3.utils.keccak256(swapKey)).call();
                             const swapType = await instance.methods.getSwapType (web3.utils.keccak256(swapKey)).call();
-        
+
                             const data = {
                                 swapType: swapType,
                                 notional: (Number(swap.notional) * this.context.contractShift).toFixed(2),

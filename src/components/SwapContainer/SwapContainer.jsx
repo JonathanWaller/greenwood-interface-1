@@ -92,10 +92,19 @@ class SwapContainer extends React.Component {
     const swapFixedRate = await this.getRate( contract );
     const daysInYear = 360;
 
+    // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
-      return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(2)
+      if (Number((swapFixedRate/100)) > minPayoutRate) {
+        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(2)
+      } else {
+        return ((this.context.selectedSwapAmount * swapDuration * Math.max(minPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+      }
     } else if (this.context.selectedSwapPosition === 'rFix') {
-      return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+      if (maxPayoutRate > Number((swapFixedRate/100))) {
+        return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+      } else {
+        return ((this.context.selectedSwapAmount * swapDuration *  Math.max(maxPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+      }
     }
   }
 
@@ -141,7 +150,7 @@ class SwapContainer extends React.Component {
       const abi = coreAbi['abi'];
       const address = this.context.contractAddresses[this.context.selectedSwapAsset];
       const instance = new web3.eth.Contract(abi, address);
-      const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
+      const amount = (Number(this.context.selectedSwapAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
       if ( this.context.selectedSwapPosition === 'pFix' ) {
         try {
           toast(<TransactionToastContainer/>, {
