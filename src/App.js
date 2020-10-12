@@ -88,10 +88,10 @@ class App extends React.Component {
       smartTrim: this.smartTrim,
       getAccountAssets: this.getAccountAssets,
       selectedSwapPosition: 'rFix',
-      selectedSwapAmount: '1000',
+      selectedSwapAmount: '100',
       selectedSwapAsset: 'dai',
       selectedLiquidityAction: 'Supply',
-      selectedLiquidityAmount: '1000',
+      selectedLiquidityAmount: '100',
       selectedLiquidityAsset: 'dai',
       positions: [ 
         {'display':'Receive', 'key': 'rFix'},
@@ -144,7 +144,8 @@ class App extends React.Component {
       ],
       renderTable: false,
       transactionStatus: 'Pending',
-      transactionHash: ''
+      transactionHash: '',
+      isDesktop: false
     }
 
     this.web3Modal = new Web3Modal({
@@ -162,9 +163,13 @@ class App extends React.Component {
     this.getAccountAssets = this.getAccountAssets.bind(this);
     this.resetApp = this.resetApp.bind(this);
     this.smartTrim = this.smartTrim.bind(this);
+    this.updatePredicate = this.updatePredicate.bind(this);
   }
 
   async componentDidMount() {
+    this.updatePredicate();
+    window.addEventListener("resize", this.updatePredicate);
+
     await this.setState({
       renderRoute: false
     });
@@ -213,6 +218,14 @@ class App extends React.Component {
     await this.setState({
       renderRoute: true
     });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updatePredicate);
+  }
+
+  updatePredicate() {
+    this.setState({ isDesktop: window.innerWidth > 1300 });
   }
 
   onConnect = async () => {
@@ -271,7 +284,6 @@ class App extends React.Component {
     // provider.on("close", () => this.resetApp());
 
     provider.on("accountsChanged", async (accounts) => {
-      console.log( 'ACCOUNTS CHANGED!!' )
       if ( accounts.length ) {
         const web3 = initWeb3(provider);
         const accounts = await web3.eth.getAccounts();

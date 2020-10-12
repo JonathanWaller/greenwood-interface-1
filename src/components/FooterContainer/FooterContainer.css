@@ -22,16 +22,16 @@ footer {
     height: 10vh;
 }
 
-.nav__links {
+.footer__nav__links {
     list-style: none;
 }
 
-.nav__links li {
+.footer__nav__links li {
     display: inline-block;
     padding: 0px 20px;
 }
 
-.nav__links li a {
+.footer__nav__links li a {
     transition: all 0.3s ease 0s;
 }
 
@@ -55,6 +55,41 @@ footer > button {
     color: #D4D5D8; 
 }
 
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .filled-footer-icon {
+        height: 20px;
+        width: 20px;
+        color: #D4D5D8; 
+    }
+}
+
 .copyright {
     margin-right: auto
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .copyright {
+        margin-right: auto;
+        font-size: 0.8em;
+    }
+}
+
+.footer-last-li {
+    padding-left: 20px;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .footer__nav__links li {
+        display: inline-block;
+        padding: 0px 10px;
+    }
 }

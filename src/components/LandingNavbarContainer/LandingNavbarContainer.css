@@ -33,7 +33,22 @@ header {
 
 .logo {
     cursor: pointer;
-    margin-right: auto
+    margin-right: auto;
+}
+
+.logo-img {
+    height: 2em;
+    min-height: 40px;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .logo-img {
+        height: 1.2em;
+        min-height: 30px;
+    }
 }
 
 .nav__links {
@@ -93,6 +108,17 @@ button {
     color: #FFFFFF;
 
 }
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .nav-button-go-to {
+        display: none;
+    }
+}
+
+nav-button-go-to
 
 .va-middle-bg-transparent {
     vertical-align: middle;

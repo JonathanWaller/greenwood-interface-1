@@ -31,8 +31,24 @@ header {
     height: 10vh;
 }
 
-.nav-logo {
+.app-logo {
     cursor: pointer;
+    margin-right: auto;
+}
+
+.app-logo-img {
+    height: 2em;
+    min-height: 40px;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .app-logo-img {
+        height: 1.2em;
+        min-height: 30px;
+    }
 }
 
 .nav__links {

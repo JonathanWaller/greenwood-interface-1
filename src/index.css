@@ -18,3 +18,15 @@ table {
   border: none;
   text-align: left;
 }
+
+.aligner-mobile {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.aligner-item-mobile {
+
+}

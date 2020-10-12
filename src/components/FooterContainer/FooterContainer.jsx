@@ -16,9 +16,9 @@ export default class FooterContainer extends Component {
         <footer>
             <h6 className="copyright">&copy; 2020 Greenwood Labs, Inc.</h6>
             <div>
-                <ul className="nav__links">
+                <ul className="footer__nav__links">
                     <li><a href="https://github.com/greenwood-finance" title="Greenwood GitHub"><span><GitHub className="va-middle-bg-transparent filled-footer-icon"/></span></a></li>
-                    <li style={{paddingRight: "0"}}><a href="https://twitter.com/GreenwoodDeFi" title="Greenwood Twitter"><span><Twitter className="va-middle-bg-transparent filled-footer-icon" /></span></a></li>
+                    <li className="footer-last-li"><a href="https://twitter.com/GreenwoodDeFi" title="Greenwood Twitter"><span><Twitter className="va-middle-bg-transparent filled-footer-icon" /></span></a></li>
                 </ul>
             </div>
         </footer>

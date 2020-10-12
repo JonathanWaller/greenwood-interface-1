@@ -17,7 +17,7 @@ class LandingNavbarContainer extends Component {
   render() {
     return (
         <header>
-            <Link to="/" className="logo"><img src={logoTmp} height="40px" alt="Greenwood"/></Link>
+            <Link to="/" className="logo"><img src={logoTmp} className="logo-img" alt="Greenwood"/></Link>
             <Link className="nav-anchor" to="/swap"><button style={{borderRadius: "4px"}} className="nav-button-go-to"><span className="va-middle-bg-transparent">Go to app</span><ArrowRight className="va-middle-bg-transparent transx-2px-right"/> </button></Link>
         </header>
 

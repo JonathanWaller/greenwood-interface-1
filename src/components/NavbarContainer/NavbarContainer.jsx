@@ -18,9 +18,9 @@ class NavbarContainer extends Component {
   render() {
     return (
         <header>
-            <Link to="/" className="logo"><img src={logoTmp} height="40px" alt="Greenwood"/></Link>
-            { this.context.connected ? <Link className="nav-anchor" style={{paddingLeft: "20px"}} to="/history">My swaps</Link> : null }
-            <Link className="nav-anchor" style={{paddingLeft: "20px"}} to={this.context.route && this.context.route === 'swap' ? '/pool' : this.context.route === 'history' ? '/swap' : '/swap'}><button style={{borderRadius: "4px"}} className="nav-button"><span className="va-middle-bg-transparent">{this.context.route && this.context.route === 'swap' ? 'Pool' : this.context.route === 'history' ? 'Swap' : 'Swap'}</span><ArrowRight className="va-middle-bg-transparent transx-2px-right"/> </button></Link>
+            <Link to="/" className="app-logo"><img src={logoTmp} className="app-logo-img" alt="Greenwood"/></Link>
+            { this.context.connected && this.context.isDesktop ? <Link className="nav-anchor" style={{paddingLeft: "20px"}} to="/history">My swaps</Link> : null }
+            { this.context.isDesktop ? <Link className="nav-anchor" style={{paddingLeft: "20px"}} to={this.context.route && this.context.route === 'swap' ? '/pool' : this.context.route === 'history' ? '/swap' : '/swap'}><button style={{borderRadius: "4px"}} className="nav-button"><span className="va-middle-bg-transparent">{this.context.route && this.context.route === 'swap' ? 'Pool' : this.context.route === 'history' ? 'Swap' : 'Swap'}</span><ArrowRight className="va-middle-bg-transparent transx-2px-right"/> </button></Link> : null}
         </header>
     )
   }
