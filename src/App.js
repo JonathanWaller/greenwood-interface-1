@@ -109,7 +109,7 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0x79B13c64566cA1796BF25A26d13b62474D511922',
+        'dai': '0x23D36e504Dd2409D1d81b72000dFb180aD67E116',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',

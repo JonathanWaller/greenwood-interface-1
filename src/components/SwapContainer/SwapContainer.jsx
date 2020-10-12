@@ -141,6 +141,7 @@ class SwapContainer extends React.Component {
       const abi = coreAbi['abi'];
       const address = this.context.contractAddresses[this.context.selectedSwapAsset];
       const instance = new web3.eth.Contract(abi, address);
+      const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
       if ( this.context.selectedSwapPosition === 'pFix' ) {
         try {
           toast(<TransactionToastContainer/>, {
@@ -153,7 +154,7 @@ class SwapContainer extends React.Component {
             progress: undefined,
             transition: Zoom
           });
-          const result = await instance.methods.openPayFixedSwap(this.context.selectedSwapAmount).send({from: this.context.address});
+          const result = await instance.methods.openPayFixedSwap(amount).send({from: this.context.address});
           this.context.setState({
             transactionStatus: 'Complete',
             transactionHash: result.transactionHash
@@ -178,7 +179,7 @@ class SwapContainer extends React.Component {
             progress: undefined,
             transition: Zoom
           });
-          const result = await instance.methods.openReceiveFixedSwap(this.context.selectedSwapAmount).send({from: this.context.address});
+          const result = await instance.methods.openReceiveFixedSwap(amount).send({from: this.context.address});
           this.context.setState({
             transactionStatus: 'Complete',
             transactionHash: result.transactionHash

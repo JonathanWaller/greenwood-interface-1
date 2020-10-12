@@ -21,9 +21,16 @@
 }
 
 .toast-text-orange {
-    color: #FF7957
+    color: #FF7957;
 }
 
 .toast-text-green {
-    color: green
+    color: green;
+}
+
+.transaction-loader {
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    margin: 0 auto;
 }
