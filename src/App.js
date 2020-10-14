@@ -20,6 +20,8 @@ import Loader from "./components/Web3ModalLoader/Web3ModalLoader";
 import ModalResult from "./components/Web3ModalResult/Web3ModalResult";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
+import daiAbi from './interfaces/dai'
+
 const SModalContainer = styled.div`
   width: 100%;
   position: relative;
@@ -109,11 +111,35 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0xc14f926D4e6CF71f873c5f67374B492d11515daf',
+        'dai': '0xD90Ce6c4886e1339c3114B6974a46864a5cA0cdB',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
+      },
+      calculatorAddresses: {
+        'dai': '0x606397B0e2E55FBB7DEcb71B2732AE6E2e20c57B',
+        // 'eth': '',
+        // 'usdc': '',
+        // 'usdt': '',
+        // 'zrx': '',
+      },
+      modelAddresses: {
+        'dai': '0x08a0aA55Af5176AEa86223c46d0A9eeeb05ADe97',
+        // 'eth': '',
+        // 'usdc': '',
+        // 'usdt': '',
+        // 'zrx': '',
+      },
+      underlyingAddresses: {
+        'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
+        // 'eth': '',
+        // 'usdc': '',
+        // 'usdt': '',
+        // 'zrx': '',
+      },
+      underlyingABIs: {
+        'dai': daiAbi
       },
       assetMantissas: {
         'dai': '1000000000000000000',
@@ -122,6 +148,7 @@ class App extends React.Component {
         // 'usdt': '1000000',
         // 'zrx': '1000000000000000000',
       },
+      
       contractShift: 0.0000000001,
       swapDetailRate: '',
       swapDetailMaturity: '',
@@ -145,7 +172,10 @@ class App extends React.Component {
       renderTable: false,
       transactionStatus: 'Pending',
       transactionHash: '',
-      isDesktop: false
+      approvalStatus: 'Pending',
+      approvalHash: '',
+      isDesktop: false,
+      approveRadio: false
     }
 
     this.web3Modal = new Web3Modal({
@@ -171,10 +201,10 @@ class App extends React.Component {
     window.addEventListener("resize", this.updatePredicate);
 
     await this.setState({
-      renderRoute: false
+      renderRoute: false,
+      approveRadio: false
     });
     if (window.web3 && window.web3.currentProvider) {
-      console.log( 'CURRENT PROVIDER: ', window.web3.currentProvider )
       const provider = window.web3.currentProvider
       try {
         await this.subscribeProvider(provider);

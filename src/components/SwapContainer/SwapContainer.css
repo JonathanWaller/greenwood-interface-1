@@ -130,3 +130,41 @@ input[type=number] {
 .form-input {
     font-family: "Roboto Mono", sans-serif;
 }
+
+.approve-radio {
+    height: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    padding: .25rem;
+    background-clip: content-box;
+    border: 1px solid #D4D5D8;
+    border-radius: 50%;
+    /* display:table-cell; */
+    vertical-align: middle
+}
+
+.approve-radio:checked {
+    background-color: #FF7957;
+    border: 1px solid #FF7957;
+}
+
+.approve-radio:disabled {
+    border: #D4D5D8;
+    background-color: #D4D5D8;
+}
+
+.approve-label {
+    color: #FF7957;
+    font-family: "Poppins", sans-serif;
+    height: 1rem;
+}
+
+.approve-label-disabled {
+    color: #D4D5D8;
+    font-family: "Poppins", sans-serif;
+    height: 1rem;
+}
