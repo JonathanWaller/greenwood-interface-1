@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@100&display=swap');
+
+.toast-aligner {
+    text-align: center
+}
+
+.toast-text-light {
+    color: #D4D5D8;
+}
+
+.toast-text-dark {
+    color: #66676F;
+}
+.font-roboto-mono {
+    font-family: "Roboto Mono", sans-serif;
+}
+
+.toast-link {
+    text-decoration: underline;
+    text-decoration-color: #FF7957;
+}
+
+.toast-text-orange {
+    color: #FF7957;
+}
+
+.toast-text-green {
+    color: green;
+}
+
+.approval-loader {
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    margin: 0 auto;
+}

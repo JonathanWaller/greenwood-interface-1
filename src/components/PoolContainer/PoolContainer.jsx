@@ -7,6 +7,8 @@ import AppContext from '../../contexts/AppContext';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TransactionToastContainer from '../TransactionToastContainer/TransactionToastContainer'
+import ApprovalToastContainer from '../ApprovalToastContainer/ApprovalToastContainer'
+import * as BigNumber from 'bignumber.js';
 
 class PoolContainer extends React.Component {
   static contextType = AppContext;
@@ -16,9 +18,14 @@ class PoolContainer extends React.Component {
     this.handlePoolSubmit = this.handlePoolSubmit.bind(this);
     this.validatePoolForm = this.validatePoolForm.bind(this);
     this.getPoolDetails = this.getPoolDetails.bind(this);
+    this.approveTransfer = this.approveTransfer.bind(this);
+    this.processLiquidity = this.processLiquidity.bind(this);
   }
 
   async componentDidMount() {
+    this.context.setState({
+      approveRadio: false
+    })
     this.validatePoolForm();
   }
   
@@ -97,6 +104,112 @@ class PoolContainer extends React.Component {
         transactionStatus: 'Pending',
         transactionHash: ''
       });
+        
+      let allowance;
+      try {
+        const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
+        const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+        const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
+        const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
+        const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+        allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+      } catch( e ) {
+        console.error( `Error getting allowance for current user in pool view - ${e.message}` );
+      }
+
+      if (Number(allowance) >= Number(this.context.selectedLiquidityAmount)) {
+        try {
+          await this.processLiquidity()
+        } catch (e) {
+          console.error( `Error executing liquidity action with allowance - ${e.message}` );
+        }
+      } else {
+        if (this.context.approveRadio === true) {
+          try {
+            await this.approveTransfer();
+            await this.processLiquidity();
+          } catch (e) {
+            console.error(`Error executing liquidity action with infinite approval - ${e.message}`)
+          }
+        } else {
+          try {
+            await this.approveTransfer();
+            await this.processLiquidity();
+          } catch (e) {
+            console.error(`Error executing liquidity action with scoped approval - ${e.message}`)
+          }
+        }
+      }
+    } else {
+      alert('Connect to a wallet to manage your account liquidity')
+    }
+  }
+
+  async approveTransfer() {
+    this.context.setState({
+      approvalStatus: 'Pending',
+      approvalHash: ''
+    });
+    const web3 = this.context.web3
+    const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+    const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
+    const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
+    const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+
+    if (this.context.approveRadio === true ) {
+      try {
+        toast(<ApprovalToastContainer/>, {
+          position: "bottom-right",
+          autoClose: false,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Zoom
+        });
+        const MAX_UINT = (new BigNumber(2)).pow(256).minus(1);
+        const result = await instance.methods.approve(greenwoodAddress, MAX_UINT).send({from: this.context.address});
+        this.context.setState({
+          approvalStatus: 'Complete',
+          approvalHash: result.transactionHash
+        });
+      } catch (e) {
+        toast.dismiss()
+        this.context.setState({
+          approvalStatus: 'Pending'
+        });
+        throw new Error(`${e.message}`)
+      }
+    } else {
+      try {
+        toast(<ApprovalToastContainer/>, {
+          position: "bottom-right",
+          autoClose: false,
+          hideProgressBar: true,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Zoom
+        });
+        const approvalAmount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false});
+        const result = await instance.methods.approve(greenwoodAddress, approvalAmount).send({from: this.context.address});
+        this.context.setState({
+          approvalStatus: 'Complete',
+          approvalHash: result.transactionHash
+        });
+      } catch (e) {
+        toast.dismiss()
+        this.context.setState({
+          approvalStatus: 'Pending'
+        });
+        throw new Error(`${e.message}`)
+      }
+    }
+  }
+
+  async processLiquidity() {
       const web3 = this.context.web3
       const abi = coreAbi['abi'];
       const address = this.context.contractAddresses[this.context.selectedLiquidityAsset];
@@ -121,11 +234,11 @@ class PoolContainer extends React.Component {
           });
           // console.log( 'ADD LIQUIDITY RESULT: ', result );
         } catch ( e ) {
-          console.error(`Error adding liquidity - ${e.message}`) 
           toast.dismiss()
           this.context.setState({
             transactionStatus: 'Pending'
           });
+          throw new Error(`Error adding liquidity - ${e.message}`);
         }
       } else if ( this.context.selectedLiquidityAction === 'Withdraw' ) {
         try {
@@ -146,18 +259,15 @@ class PoolContainer extends React.Component {
           });
           // console.log( 'REMOVE LIQUIDITY RESULT: ', result );
         } catch ( e ) {
-          console.error(`Error removing liquidity - ${e.message}`);
           toast.dismiss()
           this.context.setState({
             transactionStatus: 'Pending'
           });
+          throw new Error(`Error removing liquidity - ${e.message}`);
         }
       } else {
-        alert('Malformed liquidity action');
+        throw new Error('Malformed liquidity action');
       }
-    } else {
-      alert('Connect to a wallet to manage your account liquidity')
-    }
   }
 
   
@@ -224,6 +334,9 @@ class PoolContainer extends React.Component {
 
             <div style={{marginTop: "5%"}}>
             <button className={this.context.connected ? 'submit-btn' : 'submit-btn-not-connected'} onClick={this.context.connected ? this.handlePoolSubmit : this.context.onConnect}>{!this.context.connected ? 'Connect to wallet' : this.context.selectedLiquidityAction}</button>
+            <div className="aligner" style={{marginTop: "5%"}}>
+              <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
+            </div>
             </div>
 
           </div>
