@@ -128,15 +128,27 @@ class PoolContainer extends React.Component {
       } else {
         if (this.context.approveRadio === true) {
           try {
-            await this.approveTransfer();
-            await this.processLiquidity();
+            if (this.context.selectedLiquidityAction === 'Supply') {
+              await this.approveTransfer();
+              await this.processLiquidity();
+            } else if (this.context.selectedLiquidityAction === 'Withdraw') {
+              await this.processLiquidity();
+            } else {
+              throw new Error( 'Malformed liquidity action' )
+            }
           } catch (e) {
             console.error(`Error executing liquidity action with infinite approval - ${e.message}`)
           }
         } else {
           try {
-            await this.approveTransfer();
-            await this.processLiquidity();
+            if (this.context.selectedLiquidityAction === 'Supply') {
+              await this.approveTransfer();
+              await this.processLiquidity();
+            } else if (this.context.selectedLiquidityAction === 'Withdraw') {
+              await this.processLiquidity();
+            } else {
+              throw new Error( 'Malformed liquidity action' )
+            }
           } catch (e) {
             console.error(`Error executing liquidity action with scoped approval - ${e.message}`)
           }
