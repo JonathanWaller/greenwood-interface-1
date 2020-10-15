@@ -24,7 +24,8 @@ class PoolContainer extends React.Component {
 
   async componentDidMount() {
     this.context.setState({
-      approveRadio: false
+      approveRadio: false,
+      selectedLiquidityAction: 'Supply'
     })
     this.validatePoolForm();
   }
@@ -81,7 +82,8 @@ class PoolContainer extends React.Component {
 
         this.context.setState({
           poolDetailBalance: newAccountLiquidity,
-          poolDetailShare: poolShare
+          poolDetailShare: poolShare,
+          isValidLiquidityAmount: this.context.selectedLiquidityAmount !== '' && Number(this.context.selectedLiquidityAmount) > 0 ? true : false
         });
 
       } catch ( e ) {
@@ -93,7 +95,7 @@ class PoolContainer extends React.Component {
   }
 
   async validatePoolForm() {
-    if (this.context.selectedLiquidityAction && this.context.selectedLiquidityAmount && this.context.selectedLiquidityAsset) {
+    if (this.context.selectedLiquidityAction && (this.context.selectedLiquidityAmount || this.context.selectedLiquidityAmount === '' ) && this.context.selectedLiquidityAsset) {
       await this.getPoolDetails();
     }
   }
@@ -148,7 +150,7 @@ class PoolContainer extends React.Component {
   async approveTransfer() {
     this.context.setState({
       approvalStatus: 'Pending',
-      approvalHash: ''
+      approvalHash: '',
     });
     const web3 = this.context.web3
     const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
@@ -284,7 +286,10 @@ class PoolContainer extends React.Component {
           draggable={false}
           transition={Zoom}
         />
-        <div className="" style={{width: "100%", textAlign: "center"}}>
+        <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
+          <div className="chain-warning-div">
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>You must be connected to the Kovan testnet to use Greenwood</button>
+          </div>
           <select className="pool-select" name="selectedLiquidityAction" style={{marginRight: "0"}} onChange={this.handleChange}>
             {this.context.actions.map(function (item, key) {
               return ( <option value={item.key} key={item.key}>{item.display}</option>)
@@ -333,9 +338,18 @@ class PoolContainer extends React.Component {
             }
 
             <div style={{marginTop: "5%"}}>
-            <button className={this.context.connected ? 'submit-btn' : 'submit-btn-not-connected'} onClick={this.context.connected ? this.handlePoolSubmit : this.context.onConnect}>{!this.context.connected ? 'Connect to wallet' : this.context.selectedLiquidityAction}</button>
-            <div className="aligner" style={{marginTop: "5%"}}>
+            <button 
+              className={this.context.connected && this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
+              onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handlePoolSubmit : this.context.onConnect}
+              disabled={this.context.connected && !this.context.isOnSupportedNetwork ? true : false}>
+                {!this.context.connected && this.context.isOnSupportedNetwork ? this.context.selectedLiquidityAction : this.context.connected && !this.context.isOnSupportedNetwork ? 'Use a supported network' : 'Connect to a wallet'}
+            </button>
+
+            <div style={{marginTop: "5%"}} className={this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'}>
               <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
+            </div>
+            <div className="aligner" style={{marginTop: "1%", textAlign: "center"}}>
+              <button disabled className={this.context.isValidLiquidityAmount ? "warning-btn-hidden" : "warning-btn"}>{`The ${this.context.selectedLiquidityAction.toLowerCase()} amount can not be 0`}</button>
             </div>
             </div>
 

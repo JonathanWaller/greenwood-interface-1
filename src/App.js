@@ -111,21 +111,21 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0xD90Ce6c4886e1339c3114B6974a46864a5cA0cdB',
+        'dai': '0xc423B6fbF10716c55a70C39fd2C4d49231dd2a78',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0x606397B0e2E55FBB7DEcb71B2732AE6E2e20c57B',
+        'dai': '0xdDf8c5a296068718Cb1D90726f3FACb610f58F84',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0x08a0aA55Af5176AEa86223c46d0A9eeeb05ADe97',
+        'dai': '0x10A88B06D01E55B096b36c77870596B3282E62Fa',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -165,8 +165,9 @@ class App extends React.Component {
           swapRate: 'Swap Rate',
           userCollateral: 'Locked Collateral',
           initTime: 'Swap Time',
-          initIndex: 'Starting Index',
-          asset: 'Asset'
+          initIndex: 'Floating Index Start',
+          asset: 'Asset',
+          settlement: 'Settle Swap'
         }
       ],
       renderTable: false,
@@ -175,7 +176,11 @@ class App extends React.Component {
       approvalStatus: 'Pending',
       approvalHash: '',
       isDesktop: false,
-      approveRadio: false
+      approveRadio: false,
+      swapDurationInSeconds: 600,
+      isValidCollateralAmount: true,
+      isValidLiquidityAmount: true,
+      isOnSupportedNetwork: false
     }
 
     this.web3Modal = new Web3Modal({
@@ -201,8 +206,7 @@ class App extends React.Component {
     window.addEventListener("resize", this.updatePredicate);
 
     await this.setState({
-      renderRoute: false,
-      approveRadio: false
+      renderRoute: false
     });
     if (window.web3 && window.web3.currentProvider) {
       const provider = window.web3.currentProvider
@@ -245,8 +249,17 @@ class App extends React.Component {
       console.log( 'NO PROVIDER' )
 
     }
+
+    let isOnSupportedNetwork;
+    if (this.state.chainId && (this.state.chainId === '42' || this.state.chainId === 42)) {
+      isOnSupportedNetwork = true
+    } else {
+      isOnSupportedNetwork = false
+    }
+
     await this.setState({
-      renderRoute: true
+      renderRoute: true,
+      isOnSupportedNetwork
     });
   }
 
@@ -282,6 +295,13 @@ class App extends React.Component {
       const chainId = await web3.eth.chainId();
       const currentAccountTruncated = this.smartTrim(address, 16) + ' '
 
+      let isOnSupportedNetwork;
+      if (chainId && (chainId === '42' || chainId === 42)) {
+        isOnSupportedNetwork = true
+      } else {
+        isOnSupportedNetwork = false
+      }
+
       try {
         await this.setState({
           web3,
@@ -290,7 +310,8 @@ class App extends React.Component {
           address,
           chainId,
           networkId,
-          currentAccountTruncated
+          currentAccountTruncated,
+          isOnSupportedNetwork
         });
       } catch ( err ) {
         console.error( `Error setting state in onConnect - ${ err.message }` );
@@ -321,6 +342,12 @@ class App extends React.Component {
         const networkId = await web3.eth.net.getId();
         const chainId = await web3.eth.chainId();
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
+        let isOnSupportedNetwork;
+        if (chainId && (chainId === '42' || chainId === 42)) {
+          isOnSupportedNetwork = true
+        } else {
+          isOnSupportedNetwork = false
+        }
 
         try {
           await this.setState({
@@ -330,7 +357,8 @@ class App extends React.Component {
             address,
             chainId,
             networkId,
-            currentAccountTruncated
+            currentAccountTruncated,
+            isOnSupportedNetwork
           });
         } catch ( err ) {
           console.error( `Error setting state in accountsChanged listener - ${ err.message }` );
