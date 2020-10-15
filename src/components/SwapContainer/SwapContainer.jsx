@@ -34,7 +34,8 @@ class SwapContainer extends React.Component {
   
   async componentDidMount() {
     this.context.setState({
-      approveRadio: false
+      approveRadio: false,
+      selectedSwapPosition: 'rFix'
     })
     this.validateSwapForm();
   }
@@ -136,15 +137,15 @@ class SwapContainer extends React.Component {
     // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
       if (Number((swapFixedRate/100)) > minPayoutRate) {
-        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(2)
+        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(5)
       } else {
-        return ((this.context.selectedSwapAmount * swapDuration * Math.max(minPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+        return ((this.context.selectedSwapAmount * swapDuration * Math.max(minPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
       }
     } else if (this.context.selectedSwapPosition === 'rFix') {
       if (maxPayoutRate > Number((swapFixedRate/100))) {
-        return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+        return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
       } else {
-        return ((this.context.selectedSwapAmount * swapDuration *  Math.max(maxPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(2)
+        return ((this.context.selectedSwapAmount * swapDuration *  Math.max(maxPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
       }
     }
   }
@@ -166,8 +167,9 @@ class SwapContainer extends React.Component {
       await this.context.setState({
         swapDetailRate: rate
         , swapDetailMaturity: maturity
-        , swapDetailFee: Number(fee * this.context.selectedSwapAmount).toFixed(2)
+        , swapDetailFee: Number(fee * this.context.selectedSwapAmount).toFixed(5)
         , swapDetailCollateral: collateral
+        , isValidCollateralAmount: Number(collateral) > 0.00000 ? true : false
       });
 
     } catch ( e ) {
@@ -277,7 +279,7 @@ class SwapContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const approvalAmount = (Number(this.context.swapDetailCollateral) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false});
+        const approvalAmount = ((Number(this.context.swapDetailCollateral) + Number(this.context.swapDetailFee)) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false});
         const result = await instance.methods.approve(greenwoodAddress, approvalAmount).send({from: this.context.address});
         this.context.setState({
           approvalStatus: 'Complete',
@@ -298,7 +300,7 @@ class SwapContainer extends React.Component {
     const abi = coreAbi['abi'];
     const address = this.context.contractAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(abi, address);
-    const amount = (Number(this.context.swapDetailCollateral) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
+    const amount = (Number(this.context.selectedSwapAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
 
     if ( this.context.selectedSwapPosition === 'pFix' ) {
       try {
@@ -371,7 +373,10 @@ class SwapContainer extends React.Component {
           draggable={false}
           transition={Zoom}
         />
-        <div className="" style={{width: "100%", textAlign: "center"}}>
+        <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
+          <div className="chain-warning-div">
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>You must be connected to the Kovan testnet to use Greenwood</button>
+          </div>
           <select className="swap-select" name="selectedSwapPosition" onChange={this.handleChange}>
             {this.context.positions.map(function (item, key) {
               return ( <option value={item.key} key={item.key}>{item.display}</option>)
@@ -435,9 +440,17 @@ class SwapContainer extends React.Component {
               </div>
             </div>
             <div style={{marginTop: "5%"}}>
-            <button className={this.context.connected ? 'submit-btn' : 'submit-btn-not-connected'} onClick={this.context.connected ? this.handleSwapSubmit : this.context.onConnect}>{this.context.connected ? 'Swap' : 'Connect to a wallet'}</button>
-            <div className="aligner" style={{marginTop: "5%"}}>
+            <button 
+              className={this.context.connected && this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
+              onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handleSwapSubmit : this.context.onConnect} 
+              disabled={this.context.connected && !this.context.isOnSupportedNetwork ? true : false}>
+                {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Use a supported network' : 'Connect to a wallet'}
+              </button>
+            <div className={this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
               <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
+            </div>
+            <div className="aligner" style={{marginTop: "1%", textAlign: "center"}}>
+              <button disabled className={this.context.isValidCollateralAmount ? "warning-btn-hidden" : "warning-btn"}>The collateral required for a swap can not be 0</button>
             </div>
             </div>
           </div>

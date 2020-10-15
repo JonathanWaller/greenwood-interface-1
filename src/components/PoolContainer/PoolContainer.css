@@ -121,3 +121,8 @@ input[type=number] {
 .form-input {
     font-family: "Roboto Mono", sans-serif;
 }
+
+.infinite-approve-div-hidden {
+    opacity: 0;
+    cursor: default;
+}
