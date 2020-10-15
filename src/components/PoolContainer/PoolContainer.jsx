@@ -353,7 +353,7 @@ class PoolContainer extends React.Component {
             <button 
               className={this.context.connected && this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
               onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handlePoolSubmit : this.context.onConnect}
-              disabled={this.context.connected && !this.context.isOnSupportedNetwork ? true : false}>
+              disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidLiquidityAmount) ? true : false}>
                 {this.context.connected && this.context.isOnSupportedNetwork ? this.context.selectedLiquidityAction : this.context.connected && !this.context.isOnSupportedNetwork ? 'Use a supported network' : 'Connect to a wallet'}
             </button>
 
