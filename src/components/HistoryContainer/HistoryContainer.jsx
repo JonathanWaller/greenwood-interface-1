@@ -160,7 +160,7 @@ class HistoryContainer extends React.Component {
                                 <th>{item.swapRate}%</th>
                                 <th>{item.userCollateral}</th>
                                 <th>{moment.unix(Number(item.initTime)).format('MMMM Do, YYYY')}</th>
-                                <th>{item.initIndex}</th>
+                                <th>{item.initIndex}%</th>
                                 <th>{moment().utc().unix() - item.initTime < this.context.swapDurationInSeconds ? null : <button className="close-swap-btn" onClick={ () => this.closeSwap(item.swapKey, item.asset.toLowerCase()) }>Settle swap</button> }</th>
                             </tr>
                         )

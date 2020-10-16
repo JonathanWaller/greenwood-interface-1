@@ -107,7 +107,7 @@ class PoolContainer extends React.Component {
         transactionHash: ''
       });
         
-      let allowance;
+      let allowance, balanceOf;
       try {
         const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
         const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
@@ -115,6 +115,9 @@ class PoolContainer extends React.Component {
         const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
         const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
         allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+        balanceOf = await instance.methods.balanceOf(this.context.address).call();
+        console.log( 'ALLOWANCE: ', allowance )
+        console.log( 'BALANCE: ', balanceOf );
       } catch( e ) {
         console.error( `Error getting allowance for current user in pool view - ${e.message}` );
       }

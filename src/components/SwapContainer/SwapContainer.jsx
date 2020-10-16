@@ -159,6 +159,8 @@ class SwapContainer extends React.Component {
     try {
       const result = await instance.methods.getState().call();
 
+      console.log( 'STATE: ', result );
+
       const rate = await this.getRate( result );
       const maturity = await this.getMaturity( result );
       const { fee } = await this.getFee( result );
