@@ -22,7 +22,7 @@ class LandingContainer extends Component {
             <div className="aligner aligner-landing">
               <div className="landing-inner">
                   <h1 className="landing-header-text">Ethereum's automated interest rate swap protocol</h1>
-                  <h6 className="landing-header-subtext">Turn their floating interest rates into fixed interest rates. Turn fixed interest rates into floating interest rates</h6>
+                  <h6 className="landing-header-subtext">Turn Compound's floating interest rates into fixed interest rates</h6>
                   <h6 className="whitepaper-h6"><a className="whitepaper-link" href="/rho-revision.pdf" target="_blank" rel="noopener noreferrer">Read the whitepaper<ArrowUpRight className="va-middle-bg-transparent transx-2px-right"/></a></h6>
               </div>
               <img src={stag} className="landing-stag" alt="Greenwood" style={{maxHeight: "80vh"}}/>
