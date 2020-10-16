@@ -187,7 +187,7 @@ class PoolContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const MAX_UINT = (new BigNumber(2)).pow(256).minus(1);
+        const MAX_UINT = new BigNumber(2).pow(256).minus(1);
         const result = await instance.methods.approve(greenwoodAddress, MAX_UINT).send({from: this.context.address});
         this.context.setState({
           approvalStatus: 'Complete',
