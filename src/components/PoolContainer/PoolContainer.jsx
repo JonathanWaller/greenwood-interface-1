@@ -54,6 +54,8 @@ class PoolContainer extends React.Component {
         const accountResult = await instance.methods.getAccount(this.context.address).call();
         const totalLiquidity = Number(stateResult.totalLiquidity) * this.context.contractShift;
         const accountBalance = Number(accountResult.amount) * this.context.contractShift;
+
+        console.log( 'ACCOUNT: ', accountResult );
         
         let newAccountLiquidity, poolShare;
         if (this.context.selectedLiquidityAction === 'Supply') {
