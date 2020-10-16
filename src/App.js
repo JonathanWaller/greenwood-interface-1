@@ -111,21 +111,21 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0xEc8c1f56065012CA154C7764B4B31df5c06A1F25',
+        'dai': '0x64c350982E5901c715A95994857331Fb0cf8a487',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0x4B7cB01fD3bE197Ce37c621871dF5cB69a2dD4cD',
+        'dai': '0xbB33F9aAFb2BDd24E960436294616d0040a683Fb',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0x9083dFa4fA813bD2498269906bC44c8B6Cf571A5',
+        'dai': '0x6C7AcC99c9eC326069F6F83aDAebbd5FEcd1efEd',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -370,12 +370,40 @@ class App extends React.Component {
     });
 
     provider.on("chainChanged", async (chainId) => {
+      console.log('changed!!!')
       const { web3 } = this.state;
       if (web3) {
-        window.location.reload();
+        // window.location.reload();
+        // const web3 = initWeb3(provider);
+        const accounts = await web3.eth.getAccounts();
+        const address = accounts[0];
+
         const networkId = await web3.eth.net.getId();
         const chainId = await web3.eth.chainId();
-        await this.setState({ chainId, networkId });
+
+        const currentAccountTruncated = this.smartTrim(address, 16) + ' '
+        let isOnSupportedNetwork;
+        if (chainId && (chainId === '42' || chainId === 42)) {
+          isOnSupportedNetwork = true
+        } else {
+          isOnSupportedNetwork = false
+        }
+
+        // await this.setState({ chainId, networkId });
+        try {
+          await this.setState({
+            web3,
+            provider,
+            connected: true,
+            address,
+            chainId,
+            networkId,
+            currentAccountTruncated,
+            isOnSupportedNetwork
+          });
+        } catch ( err ) {
+          console.error( `Error setting state in chainChanged listener - ${ err.message }` );
+        }
         await this.getAccountAssets();
       }
     });

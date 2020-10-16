@@ -160,7 +160,7 @@ class PoolContainer extends React.Component {
         }
       }
     } else {
-      alert('Connect to a wallet to manage your account liquidity')
+      alert('Connect to a wallet to manage your pool balance')
     }
   }
 
@@ -305,7 +305,7 @@ class PoolContainer extends React.Component {
         />
         <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
           <div className="chain-warning-div">
-            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>You must be connected to the Kovan testnet to use Greenwood</button>
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Kovan testnet to use Greenwood</button>
           </div>
           <select className="pool-select" name="selectedLiquidityAction" style={{marginRight: "0"}} onChange={this.handleChange}>
             {this.context.actions.map(function (item, key) {
@@ -325,8 +325,19 @@ class PoolContainer extends React.Component {
 
             { this.context.connected ?
             <div>
+              <div className="pool-detail" style={{visibility:"hidden"}}>
+                <h6 className="pool-detail-label">Your pool balance will be</h6>
+                <div>
+                    <ul className="pool__nav__links">
+                        <li className="pool-detail-value">
+                          ...
+                        </li>
+                    </ul>
+                </div>
+              </div>
+
               <div className="pool-detail">
-                <h6 className="pool-detail-label">Your account liquidity will be</h6>
+                <h6 className="pool-detail-label">Your pool balance will be</h6>
                 <div>
                     <ul className="pool__nav__links">
                         <li className="pool-detail-value">
@@ -346,6 +357,17 @@ class PoolContainer extends React.Component {
                     </ul>
                 </div>
               </div>
+
+              <div className="pool-detail" style={{visibility:"hidden"}}>
+                <h6 className="pool-detail-label">Your pool balance will be</h6>
+                <div>
+                    <ul className="pool__nav__links">
+                        <li className="pool-detail-value">
+                          ...
+                        </li>
+                    </ul>
+                </div>
+              </div>
             </div>
 
             :
@@ -359,7 +381,7 @@ class PoolContainer extends React.Component {
               className={this.context.connected && this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
               onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handlePoolSubmit : this.context.onConnect}
               disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidLiquidityAmount) ? true : false}>
-                {this.context.connected && this.context.isOnSupportedNetwork ? this.context.selectedLiquidityAction : this.context.connected && !this.context.isOnSupportedNetwork ? 'Use a supported network' : 'Connect to a wallet'}
+                {this.context.connected && this.context.isOnSupportedNetwork ? this.context.selectedLiquidityAction : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : 'Connect to a wallet'}
             </button>
 
             <div style={{marginTop: "5%"}} className={this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'}>

@@ -17,6 +17,15 @@ class HistoryContainer extends React.Component {
   }
   
   async componentDidMount() {
+    const indexes = [0,1,2,3];
+    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
+    for(let i of indexes) {
+        const addressBytes = web3.utils.padLeft(web3.utils.toHex(this.context.address), 64)
+        const swapNumberBytes = web3.utils.padLeft(web3.utils.toHex(i), 64)
+        const data = addressBytes.concat(swapNumberBytes.replace('0x',''));
+        const swapKey = web3.utils.keccak256(data)
+        console.log( `${this.context.address} SWAP ${i} KEY: ${swapKey}` )
+    }
     await this.getHistory();
   }
 
@@ -173,7 +182,7 @@ class HistoryContainer extends React.Component {
                             : 
                             
                             <div className="chain-warning-div">
-                                <button disabled className="chain-warning-btn">You must be connected to the Kovan testnet to use Greenwood</button>
+                                <button disabled className="chain-warning-btn">Connect to the Kovan testnet to use Greenwood</button>
                             </div>
                             
                             }
@@ -182,9 +191,7 @@ class HistoryContainer extends React.Component {
 
 
                         
-                        {/* <div className="chain-warning-div">
-                            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>You must be connected to the Kovan testnet to use Greenwood</button>
-                        </div> */}
+
                     </tr>
                     }
                 </tbody>

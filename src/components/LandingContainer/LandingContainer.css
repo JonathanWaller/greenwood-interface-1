@@ -66,6 +66,11 @@ and (-webkit-min-device-pixel-ratio: 3) {
 .landing-inner {
     max-width: 50%;
     text-align: left;
+    /* background-image: url('../../assets/images/stag_large.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height:80vh */
 }
 
 @media only screen 

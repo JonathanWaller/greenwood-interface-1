@@ -182,12 +182,12 @@ const model = {
     "42": {
       "events": {},
       "links": {},
-      "address": "0x10A88B06D01E55B096b36c77870596B3282E62Fa",
-      "transactionHash": "0xad69cfb7411dc061c8773f0997ffb6683d23311c3df92c8f2e5c9c5a0e959578"
+      "address": "0x6C7AcC99c9eC326069F6F83aDAebbd5FEcd1efEd",
+      "transactionHash": "0x28f14f044fe11a849ab61c78f08513dd870a1de302861954f8bbe685263f2618"
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-10-15T21:40:05.789Z",
+  "updatedAt": "2020-10-16T17:48:21.137Z",
   "networkType": "ethereum"
 }
   
