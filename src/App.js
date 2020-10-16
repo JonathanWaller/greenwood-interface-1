@@ -370,7 +370,6 @@ class App extends React.Component {
     });
 
     provider.on("chainChanged", async (chainId) => {
-      console.log('changed!!!')
       const { web3 } = this.state;
       if (web3) {
         // window.location.reload();
