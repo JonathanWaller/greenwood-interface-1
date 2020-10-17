@@ -101,7 +101,7 @@ class SwapContainer extends React.Component {
       fee = -fee;
     }
 
-    return (((rateRange * rateFactor / (Math.sqrt((rateFactor * rateFactor) + slopeFactor))) + yOffset + fee) * 100).toFixed(2);
+    return (((rateRange * rateFactor / (Math.sqrt((rateFactor * rateFactor) + slopeFactor))) + yOffset + fee) * 100);
   }
 
   async getMaturity( contract ) {
@@ -136,17 +136,9 @@ class SwapContainer extends React.Component {
 
     // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
-      if (Number((swapFixedRate/100)) > minPayoutRate) {
         return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(5)
-      } else {
-        return ((this.context.selectedSwapAmount * swapDuration * Math.max(minPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
-      }
     } else if (this.context.selectedSwapPosition === 'rFix') {
-      if (maxPayoutRate > Number((swapFixedRate/100))) {
         return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
-      } else {
-        return ((this.context.selectedSwapAmount * swapDuration *  Math.max(maxPayoutRate, Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
-      }
     }
   }
 
@@ -167,7 +159,7 @@ class SwapContainer extends React.Component {
       const collateral = await this.getCollateral( result );
 
       await this.context.setState({
-        swapDetailRate: rate
+        swapDetailRate: rate.toFixed(5)
         , swapDetailMaturity: maturity
         , swapDetailFee: Number(fee * this.context.selectedSwapAmount).toFixed(5)
         , swapDetailCollateral: collateral

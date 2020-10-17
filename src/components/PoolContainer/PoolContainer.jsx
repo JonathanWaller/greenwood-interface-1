@@ -54,12 +54,10 @@ class PoolContainer extends React.Component {
         const accountResult = await instance.methods.getAccount(this.context.address).call();
         const totalLiquidity = Number(stateResult.totalLiquidity) * this.context.contractShift;
         const accountBalance = Number(accountResult.amount) * this.context.contractShift;
-
-        console.log( 'ACCOUNT: ', accountResult );
         
         let newAccountLiquidity, poolShare;
         if (this.context.selectedLiquidityAction === 'Supply') {
-          newAccountLiquidity = (accountBalance + Number(this.context.selectedLiquidityAmount)).toFixed(2);
+          newAccountLiquidity = (accountBalance + Number(this.context.selectedLiquidityAmount));
           if (totalLiquidity === 0) {
             poolShare = '100.00'
           } else {
@@ -69,9 +67,9 @@ class PoolContainer extends React.Component {
             }
           }
         } else if (this.context.selectedLiquidityAction === 'Withdraw') {
-          newAccountLiquidity = (Math.max(accountBalance - Number(this.context.selectedLiquidityAmount),0)).toFixed(2);
-          if (totalLiquidity === 0) {
-            poolShare = '100.00'
+          newAccountLiquidity = (Math.max(accountBalance - Number(this.context.selectedLiquidityAmount),0));
+          if ( totalLiquidity - Number(this.context.selectedLiquidityAmount) === 0 ) {
+            poolShare = '0.00'
           } else {
             poolShare = ((newAccountLiquidity / (totalLiquidity - Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
             if (Number(poolShare) < 0.01) {
@@ -83,7 +81,7 @@ class PoolContainer extends React.Component {
         }
 
         this.context.setState({
-          poolDetailBalance: newAccountLiquidity,
+          poolDetailBalance: newAccountLiquidity.toFixed(2),
           poolDetailShare: poolShare,
           isValidLiquidityAmount: this.context.selectedLiquidityAmount !== '' && Number(this.context.selectedLiquidityAmount) > 0 ? true : false
         });
@@ -118,8 +116,6 @@ class PoolContainer extends React.Component {
         const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
         allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
         balanceOf = await instance.methods.balanceOf(this.context.address).call();
-        console.log( 'ALLOWANCE: ', allowance )
-        console.log( 'BALANCE: ', balanceOf );
       } catch( e ) {
         console.error( `Error getting allowance for current user in pool view - ${e.message}` );
       }
@@ -233,7 +229,8 @@ class PoolContainer extends React.Component {
       const abi = coreAbi['abi'];
       const address = this.context.contractAddresses[this.context.selectedLiquidityAsset];
       const instance = new web3.eth.Contract(abi, address);
-      const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
+      const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false});
+
       if ( this.context.selectedLiquidityAction === 'Supply' ) {
         try {
           toast(<TransactionToastContainer/>, {

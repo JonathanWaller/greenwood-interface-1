@@ -111,21 +111,21 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0x64c350982E5901c715A95994857331Fb0cf8a487',
+        'dai': '0xDdbC95ec879AdBDB3494c89C560D0C838b599c06',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xbB33F9aAFb2BDd24E960436294616d0040a683Fb',
+        'dai': '0x7a2ec28b0100D202eAd423f36B032d2B74be8d38',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0x6C7AcC99c9eC326069F6F83aDAebbd5FEcd1efEd',
+        'dai': '0x3dBc7A1b06d3E7fC86522C175A53Ed1b396892Fa',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -177,7 +177,7 @@ class App extends React.Component {
       approvalHash: '',
       isDesktop: false,
       approveRadio: false,
-      swapDurationInSeconds: 600,
+      swapDurationInSeconds: 60,
       isValidCollateralAmount: true,
       isValidLiquidityAmount: true,
       isOnSupportedNetwork: false

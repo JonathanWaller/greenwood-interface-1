@@ -17,15 +17,6 @@ class HistoryContainer extends React.Component {
   }
   
   async componentDidMount() {
-    const indexes = [0,1,2,3];
-    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-    for(let i of indexes) {
-        const addressBytes = web3.utils.padLeft(web3.utils.toHex(this.context.address), 64)
-        const swapNumberBytes = web3.utils.padLeft(web3.utils.toHex(i), 64)
-        const data = addressBytes.concat(swapNumberBytes.replace('0x',''));
-        const swapKey = web3.utils.keccak256(data)
-        console.log( `${this.context.address} SWAP ${i} KEY: ${swapKey}` )
-    }
     await this.getHistory();
   }
 
