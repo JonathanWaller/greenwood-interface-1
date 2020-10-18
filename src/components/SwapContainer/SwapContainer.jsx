@@ -70,7 +70,6 @@ class SwapContainer extends React.Component {
     } catch ( e ) {
       console.error(`Error fetching contract model for swap details - ${e.message}`)
     }
-
     if ( Number(totalLiquidity) === 0) {
       return { fee: Number(feeBase), model: modelResult}
     } else {
@@ -161,7 +160,7 @@ class SwapContainer extends React.Component {
       await this.context.setState({
         swapDetailRate: rate.toFixed(5)
         , swapDetailMaturity: maturity
-        , swapDetailFee: Number(fee * this.context.selectedSwapAmount).toFixed(5)
+        , swapDetailFee: (Number(fee) * 100).toFixed(5)
         , swapDetailCollateral: collateral
         , isValidCollateralAmount: Number(collateral) > 0.00000 ? true : false
       });
@@ -414,7 +413,7 @@ class SwapContainer extends React.Component {
               <div>
                   <ul className="swap__nav__links">
                       <li className="swap-detail-value">
-                        {this.context.swapDetailFee ? this.context.swapDetailFee : '---'} {this.context.swapDetailFee && this.context.selectedSwapAsset ? this.context.selectedSwapAsset.toUpperCase() : ''} 
+                        {this.context.swapDetailFee ? `${this.context.swapDetailFee}%` : '---'} 
                       </li>
                   </ul>
               </div>

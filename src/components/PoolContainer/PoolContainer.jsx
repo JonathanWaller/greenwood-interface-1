@@ -63,6 +63,7 @@ class PoolContainer extends React.Component {
           if (totalLiquidity === 0) {
             poolShare = '100.00'
           } else {
+            // TODO: WHEN TOTAL LIQUIDITY IS NEGATIVE THIS CALCULATION BREAKS
             poolShare = ((newAccountLiquidity / (totalLiquidity + Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
             if (Number(poolShare) < 0.01) {
               poolShare = '< 0.01'
@@ -70,7 +71,7 @@ class PoolContainer extends React.Component {
           }
         } else if (this.context.selectedLiquidityAction === 'Withdraw') {
           newAccountLiquidity = (Math.max(accountBalance - Number(this.context.selectedLiquidityAmount),0));
-          if ( totalLiquidity - Number(this.context.selectedLiquidityAmount) === 0 ) {
+          if ( totalLiquidity - Number(this.context.selectedLiquidityAmount) === 0 || Number(this.context.selectedLiquidityAmount) >= totalLiquidity ) {
             poolShare = '0.00'
           } else {
             poolShare = ((newAccountLiquidity / (totalLiquidity - Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);

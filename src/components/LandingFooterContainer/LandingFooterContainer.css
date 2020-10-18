@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+footer-landing > li, a, button, h6 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #66676F;
+    text-decoration: none;
+}
+
+footer-landing {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    height: 10vh;
+}
+
+.footer__landing__nav__links {
+    list-style: none;
+}
+
+.footer__landing__nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+}
+
+.footer__landing__nav__links li a {
+    transition: all 0.3s ease 0s;
+}
+
+footer-landing > button {
+    margin-left: 20px;
+    padding: 9px 25px;
+    background-color: rgba(255,121,87, 1);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.va-middle-bg-transparent {
+    vertical-align: middle;
+    background-color: transparent;
+}
+
+.filled-footer-landing-icon {
+    /* fill: #D4D5D8; */
+    color: #66676F; 
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .filled-footer-landing-icon {
+        height: 20px;
+        width: 20px;
+        color: #66676F; 
+    }
+}
+
+.copyright-landing {
+    margin-right: auto;
+    color: #66676F; 
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .copyright-landing {
+        margin-right: auto;
+        font-size: 0.8em;
+    }
+}
+
+.footer-last-li {
+    padding-left: 20px;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .footer__landing__nav__links li {
+        display: inline-block;
+        padding: 0px 10px;
+    }
+}

@@ -1,15 +1,15 @@
 import React from 'react';
 import LandingNavbarContainer from "../../components/LandingNavbarContainer/LandingNavbarContainer.jsx"
-import LandingContainer from "../../components/LandingContainer/LandingContainer.jsx"
+import TermsContainer from "../../components/TermsContainer/TermsContainer.jsx"
 import LandingFooterContainer from "../../components/LandingFooterContainer/LandingFooterContainer.jsx"
-import './LandingView.css';
+import './TermsView.css';
 
-export default class PoolView extends React.Component {  
+export default class TermsView extends React.Component {  
     render() {
         return (
             <div>
                 <LandingNavbarContainer></LandingNavbarContainer>
-                <LandingContainer></LandingContainer>
+                <TermsContainer></TermsContainer>
                 <LandingFooterContainer></LandingFooterContainer>
             </div>
         )

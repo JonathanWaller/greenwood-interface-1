@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import { withRouter } from "react-router-dom";
 import { ArrowUpRight } from 'react-feather';
 import './LandingContainer.css';
-import stag from '../../assets/images/stag_large.png'
+// import stag from '../../assets/images/stag_large_grey.png'
+import tokenGrid from '../../assets/images/token_grid.png'
 import AppContext from '../../contexts/AppContext';
 
 class LandingContainer extends Component {
@@ -18,14 +19,19 @@ class LandingContainer extends Component {
 
   render() {
     return (
-        <main className="">
+        <main className="" style={{backgroundColor: "#2D2F3A"}}>
             <div className="aligner aligner-landing">
               <div className="landing-inner">
-                  <h1 className="landing-header-text">Ethereum's automated interest rate swap protocol</h1>
+                  {/* <h1 className="landing-header-text">Ethereum's automated interest rate swap protocol</h1> */}
+                  {/* <h1 className="landing-header-text">ETHEREUM'S AUTOMATED INTEREST RATE SWAP PROTOCOL</h1> */}
+                  <h1 className="landing-header-text">Fixed interest rates for decentralized finance</h1>
                   <h6 className="landing-header-subtext">Turn Compound's floating interest rates into fixed interest rates</h6>
                   <h6 className="whitepaper-h6"><a className="whitepaper-link" href="/rho-revision.pdf" target="_blank" rel="noopener noreferrer">Read the whitepaper<ArrowUpRight className="va-middle-bg-transparent transx-2px-right"/></a></h6>
               </div>
-              <img src={stag} className="landing-stag" alt="Greenwood" style={{maxHeight: "80vh"}}/>
+              {/* <img src={stag} className="landing-stag" alt="Greenwood" style={{maxHeight: "80vh", opacity: "0"}}/> */}
+              <div>
+                <img src={tokenGrid} className="landing-stag" alt="Greenwood" style={{maxHeight: "50vh"}}/>
+              </div>
               {this.context.isDesktop ? null : <button disabled className="badge-btn">Greenwood is not available on mobile devices</button>}
             </div>
         </main>

@@ -7,7 +7,7 @@
     padding: 0;
 }
 
-header > li, a {
+header-landing > li, a {
     font-family: "Roboto Mono", sans-serif;
     font-weight: 500;
     font-size: 16px;
@@ -15,7 +15,7 @@ header > li, a {
     text-decoration: none;
 }
 
-header > a > button {
+header-landing > a > button {
     font-family: "Poppins", sans-serif;
     font-weight: 500;
     font-size: 16px;
@@ -23,7 +23,7 @@ header > a > button {
     text-decoration: none;
 }
 
-header {
+header-landing {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -34,6 +34,20 @@ header {
 .logo {
     cursor: pointer;
     margin-right: auto;
+    font-size: 1.7em;
+    color: #66676F;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .logo {
+        cursor: pointer;
+        margin-right: auto;
+        font-size: 1.2em;
+        color: #66676F;
+    }
 }
 
 .logo-img {
@@ -95,7 +109,7 @@ button {
     min-width: 200px;
     margin-left: 2%;
     padding: 9px 25px;
-    background-color: #F3F4F6;
+    background-color: #2D2F3A;
     border: 2px solid #FF7957;
     border-radius: 4px;
     cursor: pointer;

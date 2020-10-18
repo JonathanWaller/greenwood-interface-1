@@ -7,6 +7,8 @@ import LandingView from './views/LandingView/LandingView.jsx'
 import SwapView from './views/SwapView/SwapView.jsx'
 import PoolView from './views/PoolView/PoolView.jsx'
 import HistoryView from './views/HistoryView/HistoryView.jsx'
+import TermsView from './views/TermsView/TermsView.jsx'
+import PrivacyView from './views/PrivacyView/PrivacyView.jsx'
 
 import AppContext from './contexts/AppContext'
 
@@ -122,6 +124,7 @@ class App extends React.Component {
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
+
         // 'zrx': '',
       },
       modelAddresses: {
@@ -510,7 +513,9 @@ class App extends React.Component {
               { renderRoute ? <Route exact path="/" render={(props) => <LandingView {...props} />} /> : null}
               { renderRoute ? <Route path="/swap" render={(props) => <SwapView {...props} />} /> : null}
               { renderRoute ? <Route path="/pool" render={(props) => <PoolView {...props} />} /> : null}
-              { renderRoute ? <Route path="/history" render={(props) => <HistoryView {...props} />} /> : null}
+              { renderRoute ? <Route path="/dashboard" render={(props) => <HistoryView {...props} />} /> : null}
+              { renderRoute ? <Route path="/terms" render={(props) => <TermsView {...props} />} /> : null}
+              { renderRoute ? <Route path="/privacy" render={(props) => <PrivacyView {...props} />} /> : null}
               <Redirect from="/*" to="/" />
             </Switch>
           </BrowserRouter>

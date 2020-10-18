@@ -34,6 +34,20 @@ header {
 .app-logo {
     cursor: pointer;
     margin-right: auto;
+    font-size: 1.7em;
+    color: #D4D5D8;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .app-logo {
+        cursor: pointer;
+        margin-right: auto;
+        font-size: 1.2em;
+        color: #D4D5D8;
+    }
 }
 
 .app-logo-img {
