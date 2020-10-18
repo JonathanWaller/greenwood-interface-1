@@ -111,21 +111,21 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0xDdbC95ec879AdBDB3494c89C560D0C838b599c06',
+        'dai': '0x09efEf5075fF3ADf9F6a402a62c0eB65129ec790',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0x7a2ec28b0100D202eAd423f36B032d2B74be8d38',
+        'dai': '0xEe485a1E4a53590ED6c9cb150a26cbB86e0FB9B4',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0x3dBc7A1b06d3E7fC86522C175A53Ed1b396892Fa',
+        'dai': '0x71BE5b83EEff0B97077625c351B3c3F115FB3268',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
