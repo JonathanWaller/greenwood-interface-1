@@ -128,7 +128,7 @@ class App extends React.Component {
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0xb83d1235331ea7c3282606AF534a1183A5C62201',
+        'dai': '0x97c1AEC61B6f62C1c30B55Bf2920d91d6765B1C8',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
