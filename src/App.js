@@ -113,14 +113,14 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0x09efEf5075fF3ADf9F6a402a62c0eB65129ec790',
+        'dai': '0xb2E5859B2B25837061A343F81a1416A45B67fCcc',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xEe485a1E4a53590ED6c9cb150a26cbB86e0FB9B4',
+        'dai': '0x98F690d891A48E94Dc4c35F811d07f7D620b207D',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -128,7 +128,7 @@ class App extends React.Component {
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0x71BE5b83EEff0B97077625c351B3c3F115FB3268',
+        'dai': '0x1e763B1553c2cfC995Fbc7f70627Df453c3e4205',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
