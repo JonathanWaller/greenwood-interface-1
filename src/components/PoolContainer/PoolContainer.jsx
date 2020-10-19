@@ -52,7 +52,7 @@ class PoolContainer extends React.Component {
       try {
         const stateResult = await instance.methods.getState().call();
         const accountResult = await instance.methods.getAccount(this.context.address).call();
-        const totalLiquidity = Number(stateResult.totalLiquidity) * this.context.contractShift;
+        const totalDeposits = Number(stateResult.totalDeposits) * this.context.contractShift;
         const accountBalance = Number(accountResult.amount) * this.context.contractShift;
 
         console.log( 'ACCOUNT DETAILS: ', accountResult );
@@ -60,21 +60,20 @@ class PoolContainer extends React.Component {
         let newAccountLiquidity, poolShare;
         if (this.context.selectedLiquidityAction === 'Supply') {
           newAccountLiquidity = (accountBalance + Number(this.context.selectedLiquidityAmount));
-          if (totalLiquidity === 0) {
+          if (totalDeposits === 0) {
             poolShare = '100.00'
           } else {
-            // TODO: WHEN TOTAL LIQUIDITY IS NEGATIVE THIS CALCULATION BREAKS
-            poolShare = ((newAccountLiquidity / (totalLiquidity + Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
+            poolShare = ((newAccountLiquidity / (totalDeposits + Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
             if (Number(poolShare) < 0.01) {
               poolShare = '< 0.01'
             }
           }
         } else if (this.context.selectedLiquidityAction === 'Withdraw') {
           newAccountLiquidity = (Math.max(accountBalance - Number(this.context.selectedLiquidityAmount),0));
-          if ( totalLiquidity - Number(this.context.selectedLiquidityAmount) === 0 || Number(this.context.selectedLiquidityAmount) >= totalLiquidity ) {
+          if ( totalDeposits - Number(this.context.selectedLiquidityAmount) === 0 || Number(this.context.selectedLiquidityAmount) >= totalDeposits ) {
             poolShare = '0.00'
           } else {
-            poolShare = ((newAccountLiquidity / (totalLiquidity - Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
+            poolShare = ((newAccountLiquidity / (totalDeposits - Number(this.context.selectedLiquidityAmount))) * 100).toFixed(2);
             if (Number(poolShare) < 0.01) {
               poolShare = '< 0.01'
             }
