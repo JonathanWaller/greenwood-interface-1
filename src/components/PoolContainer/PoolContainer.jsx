@@ -312,7 +312,7 @@ class PoolContainer extends React.Component {
               })
             }
           </select>
-          <input className="form-input" type="number" placeholder="---" name="selectedLiquidityAmount" onChange={this.handleChange} value={this.context.selectedLiquidityAmount}/>
+          <input className="form-input" type="number" placeholder="---" name="selectedLiquidityAmount" onChange={this.handleChange} value={this.context.selectedLiquidityAmount} onFocus={e => e.target.value === this.context.selectedLiquidityAmount ? e.target.value = '' : null}/>
           <select className="pool-select" name="selectedLiquidityAsset" onChange={this.handleChange}>
             {this.context.greenwoodAssets.map(function (item, key) {
               return ( <option value={item.key} key={item.key}>{item.display}</option>)

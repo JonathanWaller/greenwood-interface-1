@@ -377,7 +377,7 @@ class SwapContainer extends React.Component {
             }
           </select>
           <span className="form-span">a fixed interest rate on</span>
-          <input className="form-input" type="number" placeholder="---" name="selectedSwapAmount" onChange={this.handleChange} value={this.context.selectedSwapAmount}/>
+          <input className="form-input" type="number" placeholder="---" name="selectedSwapAmount" onChange={this.handleChange} value={this.context.selectedSwapAmount} onFocus={e => e.target.value === this.context.selectedSwapAmount ? e.target.value = '' : null}/>
           <select className="swap-select" name="selectedSwapAsset" onChange={this.handleChange}>
             {this.context.greenwoodAssets.map(function (item, key) {
               return ( <option value={item.key} key={item.key}>{item.display}</option>)
