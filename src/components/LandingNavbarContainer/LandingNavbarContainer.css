@@ -101,9 +101,15 @@ button {
     color: #FFFFFF;
 }
 
+/* .transx-2px-xy:hover {
+    transform: translate(2px, -2px);
+    color: #FFFFFF;
+} */
+
 .transx-2px-right {
-    color: #FF7957;
+    color: #745148;
 }
+
 
 .nav-button-go-to {
     min-width: 200px;

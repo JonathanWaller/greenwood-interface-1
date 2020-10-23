@@ -78,12 +78,12 @@ const calculator = {
     "42": {
       "events": {},
       "links": {},
-      "address": "0x275D0e228172fcd30BA1D25057a35d476d6F4AbA",
-      "transactionHash": "0x99803f5af9715e9af8e6a0e4d04b0d8fce91e0ed9a5370152875aa7784d77032"
+      "address": "0x4Baa6884302A92998b14f978b860486BD629ccdD",
+      "transactionHash": "0xb67d1899680bf52fc821f34a679042704c37ff48a2b0e37809661137774ded71"
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-10-19T14:02:49.159Z",
+  "updatedAt": "2020-10-22T22:17:28.421Z",
   "networkType": "ethereum"
 }
   

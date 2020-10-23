@@ -167,6 +167,11 @@ and (-webkit-min-device-pixel-ratio: 3) {
     text-decoration-color: #FF7957;
 }
 
+.whitepaper-link:hover .transx-2px-xy {
+    transform: translate(2px, -2px);
+    color: #FFFFFF;
+}
+
 @media only screen 
 and (min-device-width: 375px) 
 and (max-device-width: 812px) 

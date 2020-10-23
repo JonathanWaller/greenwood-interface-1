@@ -114,6 +114,12 @@ button {
     color: #FF7957
 }
 
+.nav-anchor-orange {
+    font-family: "Poppins", sans-serif;
+    color: #FF7957;
+    font-weight: 500;
+}
+
 .nav-button {
     min-width: 175px;
     margin-left: 2%;
@@ -153,4 +159,22 @@ button {
 .connected-address {
     font-family: "Roboto Mono", sans-serif;
     color: #66676F;
+}
+
+.account-swap-span {
+    margin: 0 auto;
+    margin-top: 0%;
+    margin-bottom: 0%;
+    border: 2px solid #FF7957;
+    background: #FFAD99;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 0.7em;
+    min-width: 90%;
+    transition: all 0.3s ease 0s;
+    font-weight: 600;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 20%
 }

@@ -65,6 +65,8 @@ class SwapContainer extends React.Component {
 
     try {
       modelResult = await instance.methods.getModel().call();
+
+      console.log( 'MODEL: ', modelResult );
       feeSensitivity = Number(modelResult.feeSensitivity) * this.context.contractShift;
       feeBase = Number(modelResult.feeBase) * this.context.contractShift;
     } catch ( e ) {
@@ -116,9 +118,9 @@ class SwapContainer extends React.Component {
   async getCollateral( contract ) {
     const swapDuration = Number(contract.swapDuration) * this.context.contractShift;
     const swapFixedRate = await this.getRate( contract );
-    const daysInYear = 360;
+    const daysInYear = 365;
 
-    let minPayoutRate, maxPayoutRate, modelResult;
+    let maxPayoutRate, modelResult;
     
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
     const abi = modelAbi['abi'];
@@ -127,7 +129,7 @@ class SwapContainer extends React.Component {
 
     try {
       modelResult = await instance.methods.getModel().call();
-      minPayoutRate = Number(modelResult.minPayoutRate) * this.context.contractShift;
+      // minPayoutRate = Number(modelResult.minPayoutRate) * this.context.contractShift;
       maxPayoutRate = Number(modelResult.maxPayoutRate) * this.context.contractShift;
     } catch ( e ) {
       console.error(`Error fetching contract model for swap details - ${e.message}`)
@@ -135,9 +137,9 @@ class SwapContainer extends React.Component {
 
     // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
-        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)) - minPayoutRate)) / daysInYear).toFixed(5)
+        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)))) / daysInYear).toFixed(8)
     } else if (this.context.selectedSwapPosition === 'rFix') {
-        return ((this.context.selectedSwapAmount * swapDuration * (maxPayoutRate - Number((swapFixedRate/100)))) / daysInYear).toFixed(5)
+        return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(8)
     }
   }
 
@@ -158,9 +160,9 @@ class SwapContainer extends React.Component {
       const collateral = await this.getCollateral( result );
 
       await this.context.setState({
-        swapDetailRate: rate.toFixed(5)
+        swapDetailRate: rate.toFixed(8)
         , swapDetailMaturity: maturity
-        , swapDetailFee: (Number(fee) * 100).toFixed(5)
+        , swapDetailFee: (Number(fee) * 100).toFixed(8)
         , swapDetailCollateral: collateral
         , isValidCollateralAmount: Number(collateral) > 0.00000 ? true : false
       });
@@ -312,6 +314,7 @@ class SwapContainer extends React.Component {
           transactionStatus: 'Complete',
           transactionHash: result.transactionHash
         });
+        await this.context.getHistory();
         // console.log( 'PAY FIXED RESULT: ', result );
       } catch ( e ) {
         toast.dismiss()
@@ -337,6 +340,7 @@ class SwapContainer extends React.Component {
           transactionStatus: 'Complete',
           transactionHash: result.transactionHash
         });
+        await this.context.getHistory();
         // console.log( 'RECEIVE FIXED RESULT: ', result );
       } catch ( e ) {
         toast.dismiss()

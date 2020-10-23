@@ -20,7 +20,7 @@ class NavbarContainer extends Component {
         <header>
             {/* <Link to="/" className="app-logo"><img src={logoTmp} className="app-logo-img" alt="Greenwood"/></Link> */}
             <Link to="/" className="app-logo">Greenwood</Link>
-            { this.context.connected && this.context.isDesktop ? <Link className="nav-anchor" style={{paddingLeft: "20px"}} to="/dashboard">My swaps</Link> : null }
+            { this.context.connected && this.context.isDesktop ? <Link className={this.context.accountSwaps.length ? 'nav-anchor-orange' : 'nav-anchor'} style={{paddingLeft: "20px", fontFamily: "Roboto Mono"}} to="/dashboard">My swaps<span disabled className={this.context.accountSwaps.length ? "account-swap-span" : null}>{this.context.accountSwaps.length ? this.context.accountSwaps.length : null}</span></Link> : null }
             { this.context.isDesktop ? <Link className="nav-anchor" style={{paddingLeft: "20px"}} to={this.context.route && this.context.route === 'swap' ? '/pool' : this.context.route === 'history' ? '/swap' : '/swap'}><button style={{borderRadius: "4px"}} className="nav-button"><span className="va-middle-bg-transparent">{this.context.route && this.context.route === 'swap' ? 'Pool' : this.context.route === 'dashboard' ? 'Swap' : 'Swap'}</span><ArrowRight className="va-middle-bg-transparent transx-2px-right"/> </button></Link> : null}
         </header>
     )
