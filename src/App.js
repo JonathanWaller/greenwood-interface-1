@@ -612,7 +612,28 @@ class App extends React.Component {
                             const initTime = parseInt(Number(swap.initTime) * this.state.contractShift);
                             let userCollateral = (Number(swap.userCollateral) * this.state.contractShift);
                             // const expiryTime = (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
-                            const expiryTime = moment.unix(parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)).fromNow(true);
+                            let expiryTime;
+                            if ( parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) > moment().unix() ) {
+                              let seconds = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
+                              if (seconds < 60) {
+                                expiryTime = 'Less than one minute'
+                              } else {
+                                let days, hours
+                                // calculate days
+                                // calculate hours
+                                // calculate seconds
+                                expiryTime = ''
+                                expiryTime = expiryTime + days > 0 ? `${days} days,` : ''
+                                expiryTime = expiryTime + hours > 0 ? `${hours} hours,` : ''
+                                expiryTime = expiryTime + seconds > 0 ? `${seconds} seconds` : ''
+                              }
+                            } else {
+                              // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
+                              // console.log( 'CURRENT: ', moment().unix())
+                              // console.log( 'DIFF: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) - moment().unix())
+                              expiryTime = 'Expired'
+                            }
+                            // const expiryTime = moment.unix(parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)).fromNow();
                             const fixedLeg  = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (parseFloat(swap.swapRate) * this.state.contractShift) * (this.state.swapDurationInSeconds / 86400)) / 365
                             // const floatLeg = (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * ((borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift) - 1.0)
                             // const floatLeg = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * newFloatIndex * (this.context.swapDurationInSeconds / 86400)) / 365
@@ -665,7 +686,7 @@ class App extends React.Component {
                                 // initIndex: (Number(swap.initIndex) * this.context.contractShift).toFixed(2),
                                 asset: asset.display,
                             };
-                            if (swapType !== '') {
+                            if (swap.isClosed === false) {
                                 assetSwaps.push(data);
                                 console.log('SWAP: ', swap)
                                 console.log( 'RATES: : ', (borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift));

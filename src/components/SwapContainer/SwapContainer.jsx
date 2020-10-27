@@ -412,7 +412,7 @@ class SwapContainer extends React.Component {
               </div>
             </div>
 
-            <div className="swap-detail">
+            {/* <div className="swap-detail">
               <h6 className="swap-detail-label">The liquidity fee for this swap is</h6>
               <div>
                   <ul className="swap__nav__links">
@@ -421,7 +421,7 @@ class SwapContainer extends React.Component {
                       </li>
                   </ul>
               </div>
-            </div>
+            </div> */}
 
             <div className="swap-detail">
               <h6 className="swap-detail-label">The collateral required for this swap is</h6>
