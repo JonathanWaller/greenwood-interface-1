@@ -206,12 +206,12 @@ const model = {
     "42": {
       "events": {},
       "links": {},
-      "address": "0x757A538AcFF9b27edf3f883658f049a1cC4B2d4C",
-      "transactionHash": "0x45052adc7816029ae75d9b7d393a3b23fd36c1f45b3e94932a346e0eac9fc7e7"
+      "address": "0x4cFf0881965aA8e9CCe829358b9f6ac0f129649B",
+      "transactionHash": "0xfa76d694f84d91763ad6de8f277b153e1ac596ad6b57999f705fb2bf6bab0123"
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-10-23T16:33:09.014Z",
+  "updatedAt": "2020-10-28T22:28:21.547Z",
   "networkType": "ethereum"
 }
   

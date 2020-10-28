@@ -120,14 +120,14 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0x4e4F41AA1fBB6410c3DfBB919bD9365DF7070BF1',
+        'dai': '0xfFc5b7D6744fc404D8e1F0a1aD9f519E83F0De60',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xe92d94B0f2c6eC712E3aa0a7EBB6036350b88283',
+        'dai': '0xdba95Af253a742Dd59F7A33F6fc90B9e31326612',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -135,7 +135,7 @@ class App extends React.Component {
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0xC131B2b9d7F7c02fC9c63506D2a62C97cF2F6274',
+        'dai': '0x4cFf0881965aA8e9CCe829358b9f6ac0f129649B',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -615,10 +615,11 @@ class App extends React.Component {
                             // const expiryTime = (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
                             let expiryTime, liquidationTime;
                             if ( parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) > moment().unix() ) {
-                            //let duration = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
-                            let duration = 83584
+                            let duration = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
+                            // let duration = 83584
                               if (duration < 60) {
                                 expiryTime = 'Less than one minute'
+                                liquidationTime = "Swap not expired"
                               } else {
 
                                 let dys = ~~(duration/86400)
@@ -651,11 +652,13 @@ class App extends React.Component {
                                   }
                                 }
 
+                                liquidationTime = "Swap not expired"
+
                               }
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              const getLiquidationTime = startTime + 43200
+                              const getLiquidationTime = startTime + 900
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 
@@ -688,7 +691,9 @@ class App extends React.Component {
                                   }
                                 }
                               }
-                              
+                              if ( !liquidationTime.length ) {
+                                liquidationTime = 'This swap can be liquidated'
+                              }
                               // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
                               // console.log( 'CURRENT: ', moment().unix())
                               // console.log( 'DIFF: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) - moment().unix())
