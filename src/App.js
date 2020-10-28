@@ -614,19 +614,45 @@ class App extends React.Component {
                             // const expiryTime = (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
                             let expiryTime;
                             if ( parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) > moment().unix() ) {
-                              let seconds = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
-                              if (seconds < 60) {
+                            //let duration = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
+                            let duration = 83584
+                              if (duration < 60) {
                                 expiryTime = 'Less than one minute'
                               } else {
-                                let days, hours
-                                // calculate days
-                                // calculate hours
-                                // calculate seconds
-                                expiryTime = ''
-                                expiryTime = expiryTime + days > 0 ? `${days} days,` : ''
-                                expiryTime = expiryTime + hours > 0 ? `${hours} hours,` : ''
-                                expiryTime = expiryTime + seconds > 0 ? `${seconds} seconds` : ''
+
+                                var dys = ~~(duration/86400)
+                                var hrs = ~~(duration % 86400 / 3600);
+                                var mins = ~~(duration % 3600 / 60);
+                                var secs = ~~duration % 60;
+                                var thisArray = [dys, hrs, mins, secs];
+                                var i;
+                                
+
+                                expiryTime = "";
+                                let dayText, hourText, minText, secText
+                                for (i in thisArray){
+                                  if (thisArray[i] > 0){
+                                    if (i === "0"){
+                                      dayText = thisArray[i] > 1 ? `${thisArray[i]} days ` : `${thisArray[i]} day `
+                                      expiryTime += dayText
+                                    }
+                                    else if (i === "1"){
+                                      hourText = thisArray[i] > 1 ? `${thisArray[i]} hours ` : `${thisArray[i]} hour `
+                                      expiryTime += hourText
+                                    }
+                                    else if (i === "2"){
+                                      minText = thisArray[i] > 1 ? `${thisArray[i]} minutes ` : `${thisArray[i]} minute `
+                                      dayText ? expiryTime += "" : expiryTime += minText
+                                    }
+                                    else if (i === "3"){
+                                      secText = thisArray[i] > 1 ? `${thisArray[i]} seconds` : `${thisArray[i]} second`
+                                      dayText ? expiryTime += "" : expiryTime += secText
+                                    }
+                                  }
+                                }
+
                               }
+
                             } else {
                               // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
                               // console.log( 'CURRENT: ', moment().unix())
