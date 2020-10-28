@@ -182,6 +182,7 @@ class HistoryContainer extends React.Component {
                                 {/* <th scope="col">{item.initTime}</th> */}
                                 {/* <th scope="col">{item.initIndex}</th> */}
                                 <th scope="col">{item.expiryTime}</th>
+                                <th scope="col">{item.liquidationTime}</th>
                                 <th scope="col">{item.currentProfit}</th>
                                 <th scope="col">Settle Swap</th>
                             </tr>
@@ -200,6 +201,7 @@ class HistoryContainer extends React.Component {
                                 {/* <th>{moment.unix(Number(item.initTime)).format('MMMM Do, YYYY')}</th> */}
                                 {/* <th>{item.initIndex}%</th> */}
                                 <th>{item.expiryTime}</th>
+                                <th>{item.liquidationTime}</th>
                         <th className={Number(item.currentProfit) > 0 ? 'color-green' : 'color-red'}>{Number(item.currentProfit) > 0 ? '+' : ''}{item.currentProfit} {item.asset}</th>
                                 <th>{moment().utc().unix() - item.initTime < this.context.swapDurationInSeconds ? <button disabled className="close-swap-btn">This swap is active</button> : <button className="close-swap-btn" onClick={ () => this.closeSwap(item.swapKey, item.asset.toLowerCase()) }>Close this swap now</button> }</th>
                             </tr>

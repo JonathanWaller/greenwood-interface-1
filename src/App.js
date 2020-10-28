@@ -202,7 +202,8 @@ class App extends React.Component {
           // asset: 'Asset',
           // settlement: 'Settle Swap'
           expiryTime: 'Time Until Expiry',
-          currentProfit: 'Approximate Current Profit'
+          currentProfit: 'Approximate Current Profit', 
+          liquidationTime: 'Time Until Liquidation'
         }
       ],
       renderTable: false,
@@ -612,7 +613,7 @@ class App extends React.Component {
                             const initTime = parseInt(Number(swap.initTime) * this.state.contractShift);
                             let userCollateral = (Number(swap.userCollateral) * this.state.contractShift);
                             // const expiryTime = (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
-                            let expiryTime;
+                            let expiryTime, liquidationTime;
                             if ( parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) > moment().unix() ) {
                             //let duration = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
                             let duration = 83584
@@ -620,14 +621,13 @@ class App extends React.Component {
                                 expiryTime = 'Less than one minute'
                               } else {
 
-                                var dys = ~~(duration/86400)
-                                var hrs = ~~(duration % 86400 / 3600);
-                                var mins = ~~(duration % 3600 / 60);
-                                var secs = ~~duration % 60;
-                                var thisArray = [dys, hrs, mins, secs];
-                                var i;
+                                let dys = ~~(duration/86400)
+                                let hrs = ~~(duration % 86400 / 3600);
+                                let mins = ~~(duration % 3600 / 60);
+                                let secs = ~~duration % 60;
+                                let thisArray = [dys, hrs, mins, secs];
+                                let i;
                                 
-
                                 expiryTime = "";
                                 let dayText, hourText, minText, secText
                                 for (i in thisArray){
@@ -654,6 +654,41 @@ class App extends React.Component {
                               }
 
                             } else {
+                              const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
+                              const getLiquidationTime = startTime + 43200
+                              const currentTime = moment().unix()
+                              const duration = getLiquidationTime - currentTime
+
+                              let dys = ~~(duration/86400)
+                              let hrs = ~~(duration % 86400 / 3600);
+                              let mins = ~~(duration % 3600 / 60);
+                              let secs = ~~duration % 60;
+                              let thisArray = [dys, hrs, mins, secs];
+                              let i;
+                              
+                              liquidationTime = ""
+                              let dayText, hourText, minText, secText
+                              for (i in thisArray){
+                                if (thisArray[i] > 0){
+                                  if (i === "0"){
+                                    dayText = thisArray[i] > 1 ? `${thisArray[i]} days ` : `${thisArray[i]} day `
+                                    liquidationTime += dayText
+                                  }
+                                  else if (i === "1"){
+                                    hourText = thisArray[i] > 1 ? `${thisArray[i]} hours ` : `${thisArray[i]} hour `
+                                    liquidationTime += hourText
+                                  }
+                                  else if (i === "2"){
+                                    minText = thisArray[i] > 1 ? `${thisArray[i]} minutes ` : `${thisArray[i]} minute `
+                                    dayText ? liquidationTime += "" : liquidationTime += minText
+                                  }
+                                  else if (i === "3"){
+                                    secText = thisArray[i] > 1 ? `${thisArray[i]} seconds` : `${thisArray[i]} second`
+                                    dayText ? liquidationTime += "" : liquidationTime += secText
+                                  }
+                                }
+                              }
+                              
                               // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
                               // console.log( 'CURRENT: ', moment().unix())
                               // console.log( 'DIFF: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) - moment().unix())
@@ -711,6 +746,7 @@ class App extends React.Component {
                                 // swapRate: ((Number(swap.swapRate) * this.context.contractShift) * 100).toFixed(2),
                                 // initIndex: (Number(swap.initIndex) * this.context.contractShift).toFixed(2),
                                 asset: asset.display,
+                                liquidationTime
                             };
                             if (swap.isClosed === false) {
                                 assetSwaps.push(data);
