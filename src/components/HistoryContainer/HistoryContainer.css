@@ -361,7 +361,7 @@
         color: #FFFFFF;
         border: none;
         background: #FF7957;
-        min-width: 60%
+        min-width: 100%
     }
 
     .close-swap-btn:hover {
@@ -376,6 +376,7 @@
         color: #FFFFFF;
         border: none;
         background: #D4D5D8;
+        min-width: 100%
 
     }
 

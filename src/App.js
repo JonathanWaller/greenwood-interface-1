@@ -120,14 +120,14 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       contractAddresses: {
-        'dai': '0x4e4F41AA1fBB6410c3DfBB919bD9365DF7070BF1',
+        'dai': '0xfFc5b7D6744fc404D8e1F0a1aD9f519E83F0De60',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xe92d94B0f2c6eC712E3aa0a7EBB6036350b88283',
+        'dai': '0xdba95Af253a742Dd59F7A33F6fc90B9e31326612',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -135,7 +135,7 @@ class App extends React.Component {
         // 'zrx': '',
       },
       modelAddresses: {
-        'dai': '0xC131B2b9d7F7c02fC9c63506D2a62C97cF2F6274',
+        'dai': '0x4cFf0881965aA8e9CCe829358b9f6ac0f129649B',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -202,7 +202,8 @@ class App extends React.Component {
           // asset: 'Asset',
           // settlement: 'Settle Swap'
           expiryTime: 'Time Until Expiry',
-          currentProfit: 'Approximate Current Profit'
+          currentProfit: 'Approximate Current Profit', 
+          liquidationTime: 'Time Until Liquidation'
         }
       ],
       renderTable: false,
@@ -612,7 +613,93 @@ class App extends React.Component {
                             const initTime = parseInt(Number(swap.initTime) * this.state.contractShift);
                             let userCollateral = (Number(swap.userCollateral) * this.state.contractShift);
                             // const expiryTime = (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
-                            const expiryTime = moment.unix(parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)).fromNow(true);
+                            let expiryTime, liquidationTime;
+                            if ( parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) > moment().unix() ) {
+                            let duration = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)) - moment().unix()
+                            // let duration = 83584
+                              if (duration < 60) {
+                                expiryTime = 'Less than one minute'
+                                liquidationTime = "Swap not expired"
+                              } else {
+
+                                let dys = ~~(duration/86400)
+                                let hrs = ~~(duration % 86400 / 3600);
+                                let mins = ~~(duration % 3600 / 60);
+                                let secs = ~~duration % 60;
+                                let thisArray = [dys, hrs, mins, secs];
+                                let i;
+                                
+                                expiryTime = "";
+                                let dayText, hourText, minText, secText
+                                for (i in thisArray){
+                                  if (thisArray[i] > 0){
+                                    if (i === "0"){
+                                      dayText = thisArray[i] > 1 ? `${thisArray[i]} days ` : `${thisArray[i]} day `
+                                      expiryTime += dayText
+                                    }
+                                    else if (i === "1"){
+                                      hourText = thisArray[i] > 1 ? `${thisArray[i]} hours ` : `${thisArray[i]} hour `
+                                      expiryTime += hourText
+                                    }
+                                    else if (i === "2"){
+                                      minText = thisArray[i] > 1 ? `${thisArray[i]} minutes ` : `${thisArray[i]} minute `
+                                      dayText ? expiryTime += "" : expiryTime += minText
+                                    }
+                                    else if (i === "3"){
+                                      secText = thisArray[i] > 1 ? `${thisArray[i]} seconds` : `${thisArray[i]} second`
+                                      dayText ? expiryTime += "" : expiryTime += secText
+                                    }
+                                  }
+                                }
+
+                                liquidationTime = "Swap not expired"
+
+                              }
+
+                            } else {
+                              const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
+                              const getLiquidationTime = startTime + 900
+                              const currentTime = moment().unix()
+                              const duration = getLiquidationTime - currentTime
+
+                              let dys = ~~(duration/86400)
+                              let hrs = ~~(duration % 86400 / 3600);
+                              let mins = ~~(duration % 3600 / 60);
+                              let secs = ~~duration % 60;
+                              let thisArray = [dys, hrs, mins, secs];
+                              let i;
+                              
+                              liquidationTime = ""
+                              let dayText, hourText, minText, secText
+                              for (i in thisArray){
+                                if (thisArray[i] > 0){
+                                  if (i === "0"){
+                                    dayText = thisArray[i] > 1 ? `${thisArray[i]} days ` : `${thisArray[i]} day `
+                                    liquidationTime += dayText
+                                  }
+                                  else if (i === "1"){
+                                    hourText = thisArray[i] > 1 ? `${thisArray[i]} hours ` : `${thisArray[i]} hour `
+                                    liquidationTime += hourText
+                                  }
+                                  else if (i === "2"){
+                                    minText = thisArray[i] > 1 ? `${thisArray[i]} minutes ` : `${thisArray[i]} minute `
+                                    dayText ? liquidationTime += "" : liquidationTime += minText
+                                  }
+                                  else if (i === "3"){
+                                    secText = thisArray[i] > 1 ? `${thisArray[i]} seconds` : `${thisArray[i]} second`
+                                    dayText ? liquidationTime += "" : liquidationTime += secText
+                                  }
+                                }
+                              }
+                              if ( !liquidationTime.length ) {
+                                liquidationTime = 'This swap can be liquidated'
+                              }
+                              // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
+                              // console.log( 'CURRENT: ', moment().unix())
+                              // console.log( 'DIFF: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) - moment().unix())
+                              expiryTime = 'Expired'
+                            }
+                            // const expiryTime = moment.unix(parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)).fromNow();
                             const fixedLeg  = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (parseFloat(swap.swapRate) * this.state.contractShift) * (this.state.swapDurationInSeconds / 86400)) / 365
                             // const floatLeg = (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * ((borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift) - 1.0)
                             // const floatLeg = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * newFloatIndex * (this.context.swapDurationInSeconds / 86400)) / 365
@@ -664,8 +751,9 @@ class App extends React.Component {
                                 // swapRate: ((Number(swap.swapRate) * this.context.contractShift) * 100).toFixed(2),
                                 // initIndex: (Number(swap.initIndex) * this.context.contractShift).toFixed(2),
                                 asset: asset.display,
+                                liquidationTime
                             };
-                            if (swapType !== '') {
+                            if (swap.isClosed === false) {
                                 assetSwaps.push(data);
                                 console.log('SWAP: ', swap)
                                 console.log( 'RATES: : ', (borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift));

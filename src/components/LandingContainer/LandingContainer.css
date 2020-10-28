@@ -169,7 +169,7 @@ and (-webkit-min-device-pixel-ratio: 3) {
 
 .whitepaper-link:hover .transx-2px-xy {
     transform: translate(2px, -2px);
-    color: #FFFFFF;
+    color: #FF7957;
 }
 
 @media only screen 
