@@ -47,7 +47,7 @@ class PoolContainer extends React.Component {
       // const web3 = this.context.web3
       const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
       const abi = coreAbi['abi'];
-      const address = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+      const address = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
       const instance = new web3.eth.Contract(abi, address);
       try {
         const stateResult = await instance.methods.getState().call();
@@ -112,7 +112,7 @@ class PoolContainer extends React.Component {
       let allowance;
       try {
         // const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-        // const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+        // const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
         // const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
         // const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
         // const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
@@ -168,7 +168,7 @@ class PoolContainer extends React.Component {
       approvalHash: '',
     });
     const web3 = this.context.web3
-    const greenwoodAddress = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+    const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
     const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
     const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
     const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
@@ -229,7 +229,7 @@ class PoolContainer extends React.Component {
   async processLiquidity() {
       const web3 = this.context.web3
       const abi = coreAbi['abi'];
-      const address = this.context.contractAddresses[this.context.selectedLiquidityAsset];
+      const address = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
       const instance = new web3.eth.Contract(abi, address);
       const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false});
 

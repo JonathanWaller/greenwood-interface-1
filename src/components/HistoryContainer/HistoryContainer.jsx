@@ -29,7 +29,7 @@ class HistoryContainer extends React.Component {
 
 //         let swaps = [];
 //         for( let asset of this.context.greenwoodAssets) {
-//             const address = this.context.contractAddresses[asset.key];
+//             const address = this.context.greenwoodAddresses[asset.key];
 //             const instance = new web3.eth.Contract(abi, address);
 //             let swapNumbers;
 //             try {
@@ -125,7 +125,7 @@ class HistoryContainer extends React.Component {
     });
     const web3 = this.context.web3
     const abi = coreAbi['abi'];
-    const address = this.context.contractAddresses[asset];
+    const address = this.context.greenwoodAddresses[asset];
     const instance = new web3.eth.Contract(abi, address);
 
     try {

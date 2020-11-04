@@ -119,7 +119,7 @@ class App extends React.Component {
         // {'display':'USDT', 'key': 'usdt'},
         // {'display':'ZRX', 'key': 'zrx'}
       ],
-      contractAddresses: {
+      greenwoodAddresses: {
         'dai': '0xfFc5b7D6744fc404D8e1F0a1aD9f519E83F0De60',
         // 'eth': '',
         // 'usdc': '',
@@ -127,14 +127,14 @@ class App extends React.Component {
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xdba95Af253a742Dd59F7A33F6fc90B9e31326612',
+        'dai': '0x65Ef595820B65c4B82e69d20446556A09237eAc0',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
 
         // 'zrx': '',
       },
-      modelAddresses: {
+      metricAddresses: {
         'dai': '0x4cFf0881965aA8e9CCe829358b9f6ac0f129649B',
         // 'eth': '',
         // 'usdc': '',
@@ -560,7 +560,7 @@ class App extends React.Component {
 
         let swaps = [];
         for( let asset of this.state.greenwoodAssets) {
-            const address = this.state.contractAddresses[asset.key];
+            const address = this.state.greenwoodAddresses[asset.key];
             const instance = new web3.eth.Contract(abi, address);
             let swapNumbers, model;
             try {

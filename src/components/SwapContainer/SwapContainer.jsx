@@ -147,7 +147,7 @@ class SwapContainer extends React.Component {
     // const web3 = this.context.web3
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
     const abi = coreAbi['abi'];
-    const address = this.context.contractAddresses[this.context.selectedSwapAsset];
+    const address = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(abi, address);
     try {
       const result = await instance.methods.getState().call();
@@ -189,7 +189,7 @@ class SwapContainer extends React.Component {
       let allowance;
       try {
         const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-        const greenwoodAddress = this.context.contractAddresses[this.context.selectedSwapAsset];
+        const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
         const tokenAbi = this.context.underlyingABIs[this.context.selectedSwapAsset];
         const tokenAddress = this.context.underlyingAddresses[this.context.selectedSwapAsset];
         const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
@@ -232,7 +232,7 @@ class SwapContainer extends React.Component {
       approvalHash: ''
     });
     const web3 = this.context.web3
-    const greenwoodAddress = this.context.contractAddresses[this.context.selectedSwapAsset];
+    const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
     const tokenAbi = this.context.underlyingABIs[this.context.selectedSwapAsset];
     const tokenAddress = this.context.underlyingAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
@@ -293,7 +293,7 @@ class SwapContainer extends React.Component {
   async processSwap() {
     const web3 = this.context.web3
     const abi = coreAbi['abi'];
-    const address = this.context.contractAddresses[this.context.selectedSwapAsset];
+    const address = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(abi, address);
     const amount = (Number(this.context.selectedSwapAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
 
