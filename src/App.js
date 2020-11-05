@@ -24,11 +24,12 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import daiAbi from './interfaces/dai'
 import cDai from './interfaces/cDai'
-import modelAbi from './interfaces/v0.1.0_model'
+
 // import axios from 'axios'
 
 import moment from 'moment'
 import coreAbi from './interfaces/v0.1.0_core'
+import fromExponential from 'from-exponential';
 
 const SModalContainer = styled.div`
   width: 100%;
@@ -120,14 +121,14 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
-        'dai': '0xfFc5b7D6744fc404D8e1F0a1aD9f519E83F0De60',
+        'dai': '0x81d75A9f9076ab5Ff6bcAA1D04b4D237F9549915',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0x65Ef595820B65c4B82e69d20446556A09237eAc0',
+        'dai': '0x8ABf58E8e87b9A8DBb3e3495656AB06B3705C4Bd',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -135,7 +136,7 @@ class App extends React.Component {
         // 'zrx': '',
       },
       metricAddresses: {
-        'dai': '0x4cFf0881965aA8e9CCe829358b9f6ac0f129649B',
+        'dai': '0x45d2c7Ed7Ee7238d9E0298edea862836b98f4c0a',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -236,6 +237,7 @@ class App extends React.Component {
     this.smartTrim = this.smartTrim.bind(this);
     this.updatePredicate = this.updatePredicate.bind(this);
     this.getHistory = this.getHistory.bind(this);
+    this.vyperTruncate = this.vyperTruncate.bind(this);
   }
 
   async componentDidMount() {
@@ -551,6 +553,19 @@ class App extends React.Component {
     return string.substring(0, midpoint-lstrip) + '...' + string.substring(midpoint+rstrip);
   }
 
+  vyperTruncate(val) {
+    val = fromExponential(val);
+    val = val.split('.');
+    let integral = val[0]
+    val = [...val[1]]
+    val = val.slice(0,10)
+    val = val.join('')
+    val = integral + '.' + val
+    val = parseFloat(val)
+
+    return val
+  }
+
   getHistory = async () => {
     if( this.state && this.state.address && this.state.isOnSupportedNetwork ) {
       // console.log( 'GETTING HISTORY' )
@@ -562,7 +577,7 @@ class App extends React.Component {
         for( let asset of this.state.greenwoodAssets) {
             const address = this.state.greenwoodAddresses[asset.key];
             const instance = new web3.eth.Contract(abi, address);
-            let swapNumbers, model;
+            let swapNumbers, state;
             try {
                 swapNumbers = await instance.methods.swapNumbers(this.state.address).call();
                 swapNumbers = Number(swapNumbers)
@@ -571,29 +586,55 @@ class App extends React.Component {
             }
 
             try {
-              const address = this.state.modelAddresses[asset.key];
-              const abi = modelAbi['abi'];
+              const address = this.state.greenwoodAddresses[asset.key];
+              const abi = coreAbi['abi'];
               const instance = new web3.eth.Contract(abi, address);
-              model = await instance.methods.getModel().call();
+              state = await instance.methods.getState().call();
             } catch ( e ) {
                 console.error(`Error fetching contract state for ${ asset.display } - ${e.message}`)
             }
 
             let borrowApy;
             try {
-                // const endpoint = `https://api.compound.finance/api/v2/ctoken?addresses=${this.state.cTokenAddresses[this.state.chainId][asset.key]}&network=kovan`;
-                // const result = await axios.get(endpoint);
-                // newFloatIndex = Number(result.data.cToken[0].borrow_rate.value);
                 const address = this.state.cTokenAddresses[this.state.chainId][asset.key]
                 const instance = new web3.eth.Contract(cDai, address);
                 const borrowRatePerBlock = await instance.methods.borrowRatePerBlock().call();
                 const ethMantissa = 1e18;
                 const blocksPerDay = 4 * 60 * 24;
-                const daysPerYear = 365;
-                borrowApy = (((Math.pow((borrowRatePerBlock / ethMantissa * blocksPerDay) + 1, daysPerYear - 1))) - 1) * 100;
 
-                console.log( 'BORROW RATE: ', borrowApy );
+                let borrowRateOverMantissa = borrowRatePerBlock / ethMantissa;
+                borrowRateOverMantissa = this.vyperTruncate(borrowRateOverMantissa)
 
+                let mulBlocksPerDay = borrowRateOverMantissa * blocksPerDay
+                mulBlocksPerDay = this.vyperTruncate(mulBlocksPerDay)
+
+                const t0 = mulBlocksPerDay + 1
+
+                let t0Squared = t0 * t0
+                t0Squared = this.vyperTruncate(t0Squared)
+
+                let t1 = t0Squared
+
+                for (let i of Array(362).keys()) {
+                  let innerMul = t1 * t0
+                  innerMul = this.vyperTruncate(innerMul)
+                  t1 = innerMul
+                }
+
+                let t2 = t1 - 1
+                t2 = this.vyperTruncate(t2)
+
+                let t3 = t2 * 100
+                t3 = this.vyperTruncate(t3)
+
+                borrowApy = t3
+
+
+                console.log( 't0: ', t0 )
+                console.log( 't1: ', t1 )
+                console.log( 't2: ', t2 )
+                console.log( 't3: ', t3 )
+                console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
             } catch (e) {
                 console.error(`Error fetching borrow rate from Compound contract- ${e.message}`);
             }
@@ -704,6 +745,7 @@ class App extends React.Component {
                             // const floatLeg = (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * ((borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift) - 1.0)
                             // const floatLeg = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * newFloatIndex * (this.context.swapDurationInSeconds / 86400)) / 365
                             const floatLeg = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowApy / 100) * (this.state.swapDurationInSeconds / 86400)) / 365
+                            
 
                             // console.log( 'RATES: : ', (parseFloat(swap.swapRate) * this.state.contractShift), borrowApy / 100 );
                             // console.log( 'FIXED: ', parseFloat(fixedLeg))
@@ -712,39 +754,37 @@ class App extends React.Component {
                             let currentProfit;
 
                             if ( swapType === 'pFix') {
-                                const counterpartyCollateral = ((parseFloat(swap.notional) / parseFloat(this.state.assetMantissas[asset.key])) * (parseFloat(this.state.swapDurationInSeconds) / 86400) * ((parseFloat(model.maxPayoutRate) * this.state.contractShift))) / 365
+                                const counterpartyCollateral = ((parseFloat(swap.notional) / parseFloat(this.state.assetMantissas[asset.key])) * (parseFloat(this.state.swapDurationInSeconds) / 86400) * ((parseFloat(state.maxPayoutRate) * this.state.contractShift))) / 365
                                 if (parseFloat(floatLeg - fixedLeg) > counterpartyCollateral ) {
                                   // counterparty at full loss
-                                  currentProfit = counterpartyCollateral.toFixed(8)
+                                  currentProfit = counterpartyCollateral.toFixed(10)
                                 } else if ( ( userCollateral + parseFloat(floatLeg - fixedLeg)) < 0) {
                                   // trader is at full loss
-                                  currentProfit = (userCollateral * -1).toFixed(8)
+                                  currentProfit = (userCollateral * -1).toFixed(10)
                                 } else {
                                   // things are kosher
-                                  currentProfit = parseFloat(floatLeg - fixedLeg).toFixed(8)
+                                  currentProfit = parseFloat(floatLeg - fixedLeg).toFixed(10)
                                 }
-                        
-                                console.log( 'CURRENT PROFIT: ', currentProfit )
                             } else {
                                 const counterpartyCollateral =  ((parseFloat(swap.notional) / parseFloat(this.state.assetMantissas[asset.key])) * (parseFloat(this.state.swapDurationInSeconds) / 86400) * ((parseFloat(swap.swapRate) * this.state.contractShift))) / 365                                
                                 // currentProfit = parseFloat(fixedLeg - floatLeg) > counterpartyCollateral ? counterpartyCollateral.toFixed(5) : parseFloat(fixedLeg - floatLeg) < userCollateral ? (userCollateral * -1).toFixed(5) : parseFloat(fixedLeg - floatLeg).toFixed(5)
                                 if (parseFloat(fixedLeg - floatLeg) > counterpartyCollateral ) {
                                   // counterparty at full loss
-                                  currentProfit = counterpartyCollateral.toFixed(8)
+                                  currentProfit = counterpartyCollateral.toFixed(10)
                                 } else if ( ( userCollateral + parseFloat(fixedLeg - floatLeg)) < 0) {
                                   // trader is at full loss
-                                  currentProfit = (userCollateral * -1).toFixed(8)
+                                  currentProfit = (userCollateral * -1).toFixed(10)
                                 } else {
                                   // things are kosher
-                                  currentProfit = parseFloat(fixedLeg - floatLeg).toFixed(8)
-                                }
+                                  currentProfit = parseFloat(fixedLeg - floatLeg).toFixed(10)
+                                }                    
                             }
 
                             const data = {
                                 swapType: swapType,
                                 // notional: (Number(swap.notional) / this.context.assetMantissas[asset.display.toLowerCase()]).toFixed(2),
                                 initTime,
-                                userCollateral: `${(Number(swap.userCollateral) * this.state.contractShift).toFixed(8)} ${asset.display}`,
+                                userCollateral: `${(Number(swap.userCollateral) * this.state.contractShift).toFixed(10)} ${asset.display}`,
                                 expiryTime,
                                 currentProfit,
                                 swapKey,
@@ -755,10 +795,11 @@ class App extends React.Component {
                             };
                             if (swap.isClosed === false) {
                                 assetSwaps.push(data);
+                                console.log( `${swapType} current profit: ${currentProfit}` )
                                 console.log('SWAP: ', swap)
                                 console.log( 'RATES: : ', (borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift));
                                 console.log( 'FIXED: ', parseFloat(fixedLeg))
-                                console.log( 'ZERO FLOAT: ', parseFloat(floatLeg))
+                                console.log( 'FLOAT: ', parseFloat(floatLeg))
                             }
                         } catch ( e ) {
                             console.error( `Error fetching swap number ${swapNumber} for asset ${asset.display} - ${e.message}` );

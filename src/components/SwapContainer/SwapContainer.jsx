@@ -3,9 +3,6 @@ import { withRouter } from 'react-router-dom';
 import './SwapContainer.css'
 import '../TextSelect/TextSelect.css'
 import coreAbi from '../../interfaces/v0.1.0_core'
-import modelAbi from '../../interfaces/v0.1.0_model'
-// import calculatorAbi from '../../interfaces/v0.1.0_calculator'
-// import daiAbi from '../../interfaces/dai'
 import Web3 from 'web3';
 import moment from 'moment';
 import AppContext from '../../contexts/AppContext';
@@ -55,41 +52,27 @@ class SwapContainer extends React.Component {
   async getFee( contract ) {
     const totalLiquidity = Number(contract.totalLiquidity) * this.context.contractShift;
     const activeCollateral = Number(contract.activeCollateral) * this.context.contractShift;
+    const feeSensitivity = Number(contract.feeSensitivity) * this.context.contractShift;
+    const feeBase = Number(contract.feeBase) * this.context.contractShift;
 
-    let feeSensitivity, feeBase, modelResult;
-
-    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-    const abi = modelAbi['abi'];
-    const address = this.context.modelAddresses[this.context.selectedSwapAsset];
-    const instance = new web3.eth.Contract(abi, address);
-
-    try {
-      modelResult = await instance.methods.getModel().call();
-
-      console.log( 'MODEL: ', modelResult );
-      feeSensitivity = Number(modelResult.feeSensitivity) * this.context.contractShift;
-      feeBase = Number(modelResult.feeBase) * this.context.contractShift;
-    } catch ( e ) {
-      console.error(`Error fetching contract model for swap details - ${e.message}`)
-    }
     if ( Number(totalLiquidity) === 0) {
-      return { fee: Number(feeBase), model: modelResult}
+      return Number(feeBase)
     } else {
-      return {fee:(((Number(activeCollateral) * Number(feeSensitivity))/Number(totalLiquidity)) + Number(feeBase)), model: modelResult}
+      return (((Number(activeCollateral) * Number(feeSensitivity))/Number(totalLiquidity)) + Number(feeBase))
     }
   }
 
   async getRate( contract ) {
-    let { fee, model } = await this.getFee( contract );
+    let fee = await this.getFee( contract );
     let rateFactorDelta = 0;
 
     let rateFactor = Number(contract.rateFactor) * this.context.contractShift;
     const totalLiquidity = Number(contract.totalLiquidity) * this.context.contractShift;
-    const rateFactorSensitivity = Number(model.rateFactorSensitivity) * this.context.contractShift;
+    const rateFactorSensitivity = Number(contract.rateFactorSensitivity) * this.context.contractShift;
     const swapDuration = Number(contract.swapDuration) * this.context.contractShift;
-    const rateRange = Number(model.rateRange) * this.context.contractShift;
-    const slopeFactor = Number(model.slopeFactor) * this.context.contractShift;
-    const yOffset = Number(model.yOffset) * this.context.contractShift;
+    const rateRange = Number(contract.rateRange) * this.context.contractShift;
+    const slopeFactor = Number(contract.slopeFactor) * this.context.contractShift;
+    const yOffset = Number(contract.yOffset) * this.context.contractShift;
 
     if ( Number(totalLiquidity) !== 0 ) {
       rateFactorDelta = (this.context.selectedSwapAmount * (rateFactorSensitivity * swapDuration)) / totalLiquidity;
@@ -117,29 +100,15 @@ class SwapContainer extends React.Component {
 
   async getCollateral( contract ) {
     const swapDuration = Number(contract.swapDuration) * this.context.contractShift;
+    const maxPayoutRate = Number(contract.maxPayoutRate) * this.context.contractShift;
     const swapFixedRate = await this.getRate( contract );
     const daysInYear = 365;
 
-    let maxPayoutRate, modelResult;
-    
-    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-    const abi = modelAbi['abi'];
-    const address = this.context.modelAddresses[this.context.selectedSwapAsset];
-    const instance = new web3.eth.Contract(abi, address);
-
-    try {
-      modelResult = await instance.methods.getModel().call();
-      // minPayoutRate = Number(modelResult.minPayoutRate) * this.context.contractShift;
-      maxPayoutRate = Number(modelResult.maxPayoutRate) * this.context.contractShift;
-    } catch ( e ) {
-      console.error(`Error fetching contract model for swap details - ${e.message}`)
-    }
-
     // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
-        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)))) / daysInYear).toFixed(8)
+        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)))) / daysInYear).toFixed(10)
     } else if (this.context.selectedSwapPosition === 'rFix') {
-        return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(8)
+        return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(10)
     }
   }
 
@@ -156,13 +125,13 @@ class SwapContainer extends React.Component {
 
       const rate = await this.getRate( result );
       const maturity = await this.getMaturity( result );
-      const { fee } = await this.getFee( result );
+      const fee = await this.getFee( result );
       const collateral = await this.getCollateral( result );
 
       await this.context.setState({
-        swapDetailRate: rate.toFixed(8)
+        swapDetailRate: rate.toFixed(10)
         , swapDetailMaturity: maturity
-        , swapDetailFee: (Number(fee) * 100).toFixed(8)
+        , swapDetailFee: (Number(fee) * 100).toFixed(10)
         , swapDetailCollateral: collateral
         , isValidCollateralAmount: Number(collateral) > 0.00000 ? true : false
       });
@@ -309,7 +278,7 @@ class SwapContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const result = await instance.methods.openPayFixedSwap(amount).send({from: this.context.address});
+        const result = await instance.methods.openSwap(amount, 'pFix').send({from: this.context.address});
         this.context.setState({
           transactionStatus: 'Complete',
           transactionHash: result.transactionHash
@@ -335,7 +304,7 @@ class SwapContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const result = await instance.methods.openReceiveFixedSwap(amount).send({from: this.context.address});
+        const result = await instance.methods.openSwap(amount, 'rFix').send({from: this.context.address});
         this.context.setState({
           transactionStatus: 'Complete',
           transactionHash: result.transactionHash

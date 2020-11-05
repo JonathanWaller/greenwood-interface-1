@@ -12,6 +12,7 @@
     "axios": "^0.20.0",
     "bignumber.js": "^9.0.1",
     "fortmatic": "^2.2.1",
+    "from-exponential": "^1.0.0",
     "history": "^5.0.0",
     "loaders.css": "^0.1.2",
     "lodash": "^4.17.20",
