@@ -24,7 +24,8 @@ class LandingContainer extends Component {
               <div className="landing-inner">
                   {/* <h1 className="landing-header-text">Ethereum's automated interest rate swap protocol</h1> */}
                   {/* <h1 className="landing-header-text">ETHEREUM'S AUTOMATED INTEREST RATE SWAP PROTOCOL</h1> */}
-                  <h1 className="landing-header-text">Interest rate swaps for decentralized finance</h1>
+                  {/* <h1 className="landing-header-text">Interest rate swaps for decentralized finance</h1> */}
+                  <h1 className="landing-header-text">The lowest interest rates in decentralized finance</h1>
                   <h6 className="landing-header-subtext">Turn Compound's floating interest rates into fixed interest rates</h6>
                   <div style={{display:"flex", verticalAlign:"middle"}}>
                   <h6 className="whitepaper-h6"><a className="whitepaper-link" href="/rho-revision.pdf" target="_blank" rel="noopener noreferrer">Read the whitepaper<ArrowUpRight className="va-middle-bg-transparent transx-2px-xy"/></a></h6>

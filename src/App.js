@@ -1,5 +1,4 @@
 import React from 'react';
-import { createBrowserHistory } from "history";
 import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 import './App.css';
 
@@ -24,8 +23,6 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import daiAbi from './interfaces/dai'
 import cDai from './interfaces/cDai'
-
-// import axios from 'axios'
 
 import moment from 'moment'
 import coreAbi from './interfaces/v0.1.0_core'
@@ -121,29 +118,28 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
-        'dai': '0x81d75A9f9076ab5Ff6bcAA1D04b4D237F9549915',
+        'dai': '0x3D7507100e826B3ba12E8141393557ACCE6E7f03',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0x8ABf58E8e87b9A8DBb3e3495656AB06B3705C4Bd',
+        'dai': '0xe5dD18E3DdeF584cc0751de76Efe98fd5aAA927f',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
-
         // 'zrx': '',
       },
       metricAddresses: {
-        'dai': '0x45d2c7Ed7Ee7238d9E0298edea862836b98f4c0a',
+        'dai': '0x431BB1c95BeD53928e83CD94adE021b8A1b1721e',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       underlyingAddresses: {
-        'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
+        'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -154,22 +150,22 @@ class App extends React.Component {
       },
       assetMantissas: {
         'dai': '1000000000000000000',
-        // 'eth': '1000000000000000000',
-        // 'usdc': '1000000',
-        // 'usdt': '1000000',
-        // 'zrx': '1000000000000000000',
+        'eth': '1000000000000000000',
+        'usdc': '1000000',
+        'usdt': '1000000',
+        'zrx': '1000000000000000000',
       },
       cTokenAddresses: {
         '1': {
-          'dai': '',
-          'bat': '',
-          'eth': '',
-          'rep': '',
-          'sai': '',
-          'usdc': '',
-          'usdt': '',
-          'wbtc': '',
-          'zrx': '',
+          'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
+          'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
+          'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
+          'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
+          'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
+          'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
+          'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
+          'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
+          'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
         },
         '42': {
           'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
@@ -195,13 +191,7 @@ class App extends React.Component {
       historyColumns: [
         {
           swapType: 'Swap Type',
-          // notional: 'Swap Notional',
-          // swapRate: 'Swap Rate',
           userCollateral: 'Collateral Locked',
-          // initTime: 'Swap Time',
-          // initIndex: 'Floating Index Start',
-          // asset: 'Asset',
-          // settlement: 'Settle Swap'
           expiryTime: 'Time Until Expiry',
           currentProfit: 'Approximate Current Profit', 
           liquidationTime: 'Time Until Liquidation'
@@ -214,7 +204,7 @@ class App extends React.Component {
       approvalHash: '',
       isDesktop: false,
       approveRadio: false,
-      swapDurationInSeconds: 60,
+      swapDurationInSeconds: 604800,
       isValidCollateralAmount: true,
       isValidLiquidityAmount: true,
       isOnSupportedNetwork: false
@@ -286,11 +276,11 @@ class App extends React.Component {
       }
       await this.getHistory();
     } else {
-      console.log( 'NO PROVIDER' );
+      console.log( 'NO WEB3 PROVIDER' );
     }
 
     let isOnSupportedNetwork;
-    if (this.state.chainId && (this.state.chainId === '42' || this.state.chainId === 42)) {
+    if (this.state.chainId && (this.state.chainId === '1' || this.state.chainId === 1)) {
       isOnSupportedNetwork = true
     } else {
       isOnSupportedNetwork = false
@@ -341,7 +331,7 @@ class App extends React.Component {
       const currentAccountTruncated = this.smartTrim(address, 16) + ' '
 
       let isOnSupportedNetwork;
-      if (chainId && (chainId === '42' || chainId === 42)) {
+      if (chainId && (chainId === '1' || chainId === 1)) {
         isOnSupportedNetwork = true
       } else {
         isOnSupportedNetwork = false
@@ -395,7 +385,7 @@ class App extends React.Component {
         const chainId = await web3.eth.chainId();
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -442,7 +432,7 @@ class App extends React.Component {
 
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -615,11 +605,11 @@ class App extends React.Component {
 
                 let t1 = t0Squared
 
-                for (let i of Array(362).keys()) {
+                Array.from(Array(362).keys()).forEach(() => {
                   let innerMul = t1 * t0
                   innerMul = this.vyperTruncate(innerMul)
                   t1 = innerMul
-                }
+                });
 
                 let t2 = t1 - 1
                 t2 = this.vyperTruncate(t2)
@@ -630,11 +620,12 @@ class App extends React.Component {
                 borrowApy = t3
 
 
-                console.log( 't0: ', t0 )
-                console.log( 't1: ', t1 )
-                console.log( 't2: ', t2 )
-                console.log( 't3: ', t3 )
-                console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
+                // console.log( 't0: ', t0 )
+                // console.log( 't1: ', t1 )
+                // console.log( 't2: ', t2 )
+                // console.log( 't3: ', t3 )
+                // console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
+                // console.log( 'BORROW APY:', borrowApy );
             } catch (e) {
                 console.error(`Error fetching borrow rate from Compound contract- ${e.message}`);
             }
@@ -699,7 +690,7 @@ class App extends React.Component {
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              const getLiquidationTime = startTime + 900
+                              const getLiquidationTime = startTime + 7200
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 
@@ -733,7 +724,7 @@ class App extends React.Component {
                                 }
                               }
                               if ( !liquidationTime.length ) {
-                                liquidationTime = 'This swap can be liquidated'
+                                liquidationTime = 'This swap is at risk of liquidation'
                               }
                               // console.log( 'END: ', parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds) )
                               // console.log( 'CURRENT: ', moment().unix())
@@ -750,6 +741,7 @@ class App extends React.Component {
                             // console.log( 'RATES: : ', (parseFloat(swap.swapRate) * this.state.contractShift), borrowApy / 100 );
                             // console.log( 'FIXED: ', parseFloat(fixedLeg))
                             // console.log( 'FLOAT: ', parseFloat(floatLeg))
+                            // console.log( 'RFIX MARK: ', parseFloat(fixedLeg - floatLeg))
                             // console.log( 'SWAP TYPE: ', parseFloat(swap.notional) / this.state.assetMantissas[asset.key], borrowApy, (parseFloat(swap.initIndex) * this.state.contractShift), -1)
                             let currentProfit;
 
@@ -766,6 +758,7 @@ class App extends React.Component {
                                   currentProfit = parseFloat(floatLeg - fixedLeg).toFixed(10)
                                 }
                             } else {
+                              // console.log( 'USER COLLAT: ', userCollateral + parseFloat(fixedLeg - floatLeg) )
                                 const counterpartyCollateral =  ((parseFloat(swap.notional) / parseFloat(this.state.assetMantissas[asset.key])) * (parseFloat(this.state.swapDurationInSeconds) / 86400) * ((parseFloat(swap.swapRate) * this.state.contractShift))) / 365                                
                                 // currentProfit = parseFloat(fixedLeg - floatLeg) > counterpartyCollateral ? counterpartyCollateral.toFixed(5) : parseFloat(fixedLeg - floatLeg) < userCollateral ? (userCollateral * -1).toFixed(5) : parseFloat(fixedLeg - floatLeg).toFixed(5)
                                 if (parseFloat(fixedLeg - floatLeg) > counterpartyCollateral ) {
@@ -795,11 +788,11 @@ class App extends React.Component {
                             };
                             if (swap.isClosed === false) {
                                 assetSwaps.push(data);
-                                console.log( `${swapType} current profit: ${currentProfit}` )
-                                console.log('SWAP: ', swap)
-                                console.log( 'RATES: : ', (borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift));
-                                console.log( 'FIXED: ', parseFloat(fixedLeg))
-                                console.log( 'FLOAT: ', parseFloat(floatLeg))
+                                // console.log( `${swapType} current profit: ${currentProfit}` )
+                                // console.log('SWAP: ', swap)
+                                // console.log( 'RATES: : ', (borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift));
+                                // console.log( 'FIXED: ', parseFloat(fixedLeg))
+                                // console.log( 'FLOAT: ', parseFloat(floatLeg))
                             }
                         } catch ( e ) {
                             console.error( `Error fetching swap number ${swapNumber} for asset ${asset.display} - ${e.message}` );
@@ -832,7 +825,7 @@ class App extends React.Component {
   }
 
   render() {
-    const hist = createBrowserHistory();
+    // const hist = createBrowserHistory();
     const {
       showModal,
       pendingRequest,
@@ -842,7 +835,8 @@ class App extends React.Component {
     return (
       <AppContext.Provider value={this.state}>
         <div className="app-container">
-          <BrowserRouter history={hist}>
+          {/* <BrowserRouter history={hist}> */}
+          <BrowserRouter>
             <Switch>
               { renderRoute ? <Route exact path="/" render={(props) => <LandingView {...props} />} /> : null}
               { renderRoute ? <Route path="/swap" render={(props) => <SwapView {...props} />} /> : null}

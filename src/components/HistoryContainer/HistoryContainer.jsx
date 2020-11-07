@@ -21,103 +21,6 @@ class HistoryContainer extends React.Component {
     await this.context.getHistory();
   }
 
-//   async getHistory() {
-//     if( this.context && this.context.address && this.context.isOnSupportedNetwork ) {
-//         // const web3 = this.context.web3
-//         const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-//         const abi = coreAbi['abi'];
-
-//         let swaps = [];
-//         for( let asset of this.context.greenwoodAssets) {
-//             const address = this.context.greenwoodAddresses[asset.key];
-//             const instance = new web3.eth.Contract(abi, address);
-//             let swapNumbers;
-//             try {
-//                 swapNumbers = await instance.methods.swapNumbers(this.context.address).call();
-//                 swapNumbers = Number(swapNumbers)
-//             } catch ( e ) {
-//                 console.error(`Error fetching swap numbers for ${ asset.display } - ${e.message}`)
-//             }
-
-//             let newFloatIndex;
-//             try {
-//                 const endpoint = `https://api.compound.finance/api/v2/ctoken?addresses=${this.context.cTokenAddresses[this.context.chainId][asset.key]}&network=kovan`;
-//                 const result = await axios.get(endpoint);
-//                 newFloatIndex = Number(result.data.cToken[0].borrow_rate.value);
-
-//             } catch (e) {
-//                 console.error(`Error fetching borrow rate from Compound API - ${e.message}`);
-//             }
-
-//             if ( swapNumbers && swapNumbers > 0 ) {
-//                 let assetSwaps = [];
-//                 await Promise.all (
-//                     [...Array(swapNumbers).keys()].map( async swapNumber => {
-//                         try {
-//                             const addressBytes = web3.utils.padLeft(web3.utils.toHex(this.context.address), 64)
-//                             const swapNumberBytes = web3.utils.padLeft(web3.utils.toHex(swapNumber), 64)
-//                             const swapKey = addressBytes.concat(swapNumberBytes.replace('0x',''));
-                   
-//                             const swap = await instance.methods.getSwap(web3.utils.keccak256(swapKey)).call();
-//                             const swapType = await instance.methods.getSwapType (web3.utils.keccak256(swapKey)).call();
-
-//                             const initTime = parseInt(Number(swap.initTime) * this.context.contractShift);
-//                             const userCollateral = `${(Number(swap.userCollateral) * this.context.contractShift).toFixed(5)} ${asset.display}`;
-//                             const expiryTime = (((parseInt(Number(swap.initTime) * this.context.contractShift) + Number(this.context.swapDurationInSeconds)) - moment().unix()) / 60) > 0 ? (((parseInt(Number(swap.initTime) * this.context.contractShift) + Number(this.context.swapDurationInSeconds)) - moment().unix()) / 60).toFixed(2) : "Expired"
-
-//                             const fixedLeg  = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * (parseFloat(swap.swapRate) * this.context.contractShift) * (this.context.swapDurationInSeconds / 86400)) / 365
-//                             const floatLeg = (parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * ((newFloatIndex * 100) / (parseFloat(swap.initIndex) * this.context.contractShift) - 1.0)
-//                             // const floatLeg = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * newFloatIndex * (this.context.swapDurationInSeconds / 86400)) / 365
-
-//                             // console.log( 'FIXED: ', (parseFloat(swap.notional) / this.context.assetMantissas[asset.key]), (parseFloat(swap.swapRate) * this.context.contractShift), (this.context.swapDurationInSeconds / 86400) )
-//                             console.log( 'FLOAT: ', (parseFloat(swap.notional) / this.context.assetMantissas[asset.key]), (newFloatIndex * 100), (parseFloat(swap.initIndex) * this.context.contractShift) )
-
-//                             console.log( 'FIXED: ', parseFloat(fixedLeg))
-//                             console.log( 'FLOAT: ', parseFloat(floatLeg))
-//                             console.log( 'SWAP TYPE: ', swapType )
-//                             let currentProfit;
-
-//                             if ( swapType === 'pFix') {
-//                                 currentProfit = parseFloat(floatLeg - fixedLeg).toFixed(5);
-//                             } else {
-//                                 currentProfit = parseFloat(fixedLeg - floatLeg).toFixed(5);
-//                             }
-
-//                             const data = {
-//                                 swapType: swapType,
-//                                 // notional: (Number(swap.notional) / this.context.assetMantissas[asset.display.toLowerCase()]).toFixed(2),
-//                                 initTime,
-//                                 userCollateral,
-//                                 expiryTime,
-//                                 currentProfit,
-//                                 swapKey,
-//                                 // swapRate: ((Number(swap.swapRate) * this.context.contractShift) * 100).toFixed(2),
-//                                 // initIndex: (Number(swap.initIndex) * this.context.contractShift).toFixed(2),
-//                                 asset: asset.display,
-//                             };
-
-//                             console.log( 'SWAP: ', swap );
-//                             if (swapType !== '') {
-//                                 assetSwaps.push(data);
-//                             }
-//                         } catch ( e ) {
-//                             console.error( `Error fetching swap number ${swapNumber} for asset ${asset.display} - ${e.message}` );
-//                         }
-//                     })
-//                 );
-//                 swaps.push(...assetSwaps);
-//             }
-//         }
-
-//         swaps.sort((a,b) => (a.initTime < b.initTime) ? 1 : ((b.initTime < a.initTime) ? -1 : 0)); 
-
-
-//         await this.context.setState({
-//             accountSwaps: swaps
-//         })
-//     }
-//   }
-
   async closeSwap(swapKey, asset) {
     this.context.setState({
         transactionStatus: 'Pending',
@@ -215,7 +118,7 @@ class HistoryContainer extends React.Component {
                             : 
                             
                             <div className="chain-warning-div">
-                                <button disabled className="chain-warning-btn">Connect to the Kovan testnet to use Greenwood</button>
+                                <button disabled className="chain-warning-btn">Connect to the Ethereum mainnet to use Greenwood</button>
                             </div>
                             
                             }
