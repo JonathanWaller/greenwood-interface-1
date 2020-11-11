@@ -75,6 +75,143 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     
+    // OLD PROD
+    // this.state = {
+    //   route: '',
+    //   currentAccount: '',
+    //   currentAccountTruncated: '',
+    //   fetching: false,
+    //   address: "",
+    //   web3: null,
+    //   provider: null,
+    //   connected: false,
+    //   chainId: 1,
+    //   networkId: 1,
+    //   assets: [],
+    //   showModal: false,
+    //   pendingRequest: false,
+    //   result: null,
+    //   setState: this.stateUpdate,
+    //   onConnect: this.onConnect,
+    //   getHistory: this.getHistory,
+    //   subscribeProvider: this.subscribeProvider,
+    //   smartTrim: this.smartTrim,
+    //   getAccountAssets: this.getAccountAssets,
+    //   selectedSwapPosition: 'rFix',
+    //   selectedSwapAmount: '100',
+    //   selectedSwapAsset: 'dai',
+    //   selectedLiquidityAction: 'Supply',
+    //   selectedLiquidityAmount: '100',
+    //   selectedLiquidityAsset: 'dai',
+    //   positions: [ 
+    //     {'display':'Receive', 'key': 'rFix'},
+    //     {'display':'Pay', 'key': 'pFix'} 
+    //   ],
+    //   actions: [ 
+    //     {'display':'Supply', 'key': 'Supply'},
+    //     {'display':'Withdraw', 'key': 'Withdraw'}
+    //   ],
+    //   greenwoodAssets: [
+    //     {'display':'DAI', 'key': 'dai'},
+    //     // {'display':'ETH', 'key': 'eth'},
+    //     // {'display':'USDC', 'key': 'usdc'},
+    //     // {'display':'USDT', 'key': 'usdt'},
+    //     // {'display':'ZRX', 'key': 'zrx'}
+    //   ],
+    //   greenwoodAddresses: {
+    //     'dai': '0x3D7507100e826B3ba12E8141393557ACCE6E7f03',
+    //     // 'eth': '',
+    //     // 'usdc': '',
+    //     // 'usdt': '',
+    //     // 'zrx': '',
+    //   },
+    //   calculatorAddresses: {
+    //     'dai': '0xe5dD18E3DdeF584cc0751de76Efe98fd5aAA927f',
+    //     // 'eth': '',
+    //     // 'usdc': '',
+    //     // 'usdt': '',
+    //     // 'zrx': '',
+    //   },
+    //   metricAddresses: {
+    //     'dai': '0x431BB1c95BeD53928e83CD94adE021b8A1b1721e',
+    //     // 'eth': '',
+    //     // 'usdc': '',
+    //     // 'usdt': '',
+    //     // 'zrx': '',
+    //   },
+    //   underlyingAddresses: {
+    //     'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
+    //     // 'eth': '',
+    //     // 'usdc': '',
+    //     // 'usdt': '',
+    //     // 'zrx': '',
+    //   },
+    //   underlyingABIs: {
+    //     'dai': daiAbi
+    //   },
+    //   assetMantissas: {
+    //     'dai': '1000000000000000000',
+    //     'eth': '1000000000000000000',
+    //     'usdc': '1000000',
+    //     'usdt': '1000000',
+    //     'zrx': '1000000000000000000',
+    //   },
+    //   cTokenAddresses: {
+    //     '1': {
+    //       'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
+    //       'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
+    //       'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
+    //       'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
+    //       'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
+    //       'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
+    //       'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
+    //       'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
+    //       'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
+    //     },
+    //     '42': {
+    //       'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
+    //       'bat': '0x4a77faee9650b09849ff459ea1476eab01606c7a',
+    //       'eth': '0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72',
+    //       'rep': '0xa4ec170599a1cf87240a35b9b1b8ff823f448b57',
+    //       'sai': '0xb3f7fb482492f4220833de6d6bfcc81157214bec',
+    //       'usdc': '0x4a92e71227d294f041bd82dd8f78591b75140d63',
+    //       'usdt': '0x3f0a0ea2f86bae6362cf9799b523ba06647da018',
+    //       'wbtc': '0xa1faa15655b0e7b6b6470ed3d096390e6ad93abb',
+    //       'zrx': '0xaf45ae737514c8427d373d50cd979a242ec59e5a',
+    //     }  
+    //   },
+    //   contractShift: 0.0000000001,
+    //   swapDetailRate: '',
+    //   swapDetailMaturity: '',
+    //   swapDetailFee: '',
+    //   swapDetailCollateral: '',
+    //   poolDetailBalance: '',
+    //   poolDetailShare: '',
+    //   renderRoute: false,
+    //   accountSwaps: [],
+    //   historyColumns: [
+    //     {
+    //       swapType: 'Swap Type',
+    //       userCollateral: 'Collateral Locked',
+    //       expiryTime: 'Time Until Expiry',
+    //       currentProfit: 'Approximate Current Profit', 
+    //       liquidationTime: 'Time Until Liquidation'
+    //     }
+    //   ],
+    //   renderTable: false,
+    //   transactionStatus: 'Pending',
+    //   transactionHash: '',
+    //   approvalStatus: 'Pending',
+    //   approvalHash: '',
+    //   isDesktop: false,
+    //   approveRadio: false,
+    //   swapDurationInSeconds: 60,
+    //   isValidCollateralAmount: true,
+    //   isValidLiquidityAmount: true,
+    //   isOnSupportedNetwork: false
+    // }
+
+    // DEMO
     this.state = {
       route: '',
       currentAccount: '',
@@ -118,28 +255,28 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
-        'dai': '0x3D7507100e826B3ba12E8141393557ACCE6E7f03',
+        'dai': '0x47d5a969C156F8b10DC1de7dbfec70a44942eFd4',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xe5dD18E3DdeF584cc0751de76Efe98fd5aAA927f',
+        'dai': '0xE959BFAB0a5683B7ec7A6cEdD04E865668043922',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       metricAddresses: {
-        'dai': '0x431BB1c95BeD53928e83CD94adE021b8A1b1721e',
+        'dai': '0x0207F7024eD892B23870A66Df3dAFD7294d90dd2',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       underlyingAddresses: {
-        'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
+        'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
@@ -204,7 +341,7 @@ class App extends React.Component {
       approvalHash: '',
       isDesktop: false,
       approveRadio: false,
-      swapDurationInSeconds: 604800,
+      swapDurationInSeconds: 60,
       isValidCollateralAmount: true,
       isValidLiquidityAmount: true,
       isOnSupportedNetwork: false
@@ -280,7 +417,7 @@ class App extends React.Component {
     }
 
     let isOnSupportedNetwork;
-    if (this.state.chainId && (this.state.chainId === '1' || this.state.chainId === 1)) {
+    if (this.state.chainId && (this.state.chainId === '42' || this.state.chainId === 42)) {
       isOnSupportedNetwork = true
     } else {
       isOnSupportedNetwork = false
@@ -331,7 +468,7 @@ class App extends React.Component {
       const currentAccountTruncated = this.smartTrim(address, 16) + ' '
 
       let isOnSupportedNetwork;
-      if (chainId && (chainId === '1' || chainId === 1)) {
+      if (chainId && (chainId === '42' || chainId === 42)) {
         isOnSupportedNetwork = true
       } else {
         isOnSupportedNetwork = false
@@ -385,7 +522,7 @@ class App extends React.Component {
         const chainId = await web3.eth.chainId();
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '1' || chainId === 1)) {
+        if (chainId && (chainId === '42' || chainId === 42)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -432,7 +569,7 @@ class App extends React.Component {
 
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '1' || chainId === 1)) {
+        if (chainId && (chainId === '42' || chainId === 42)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -690,7 +827,8 @@ class App extends React.Component {
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              const getLiquidationTime = startTime + 7200
+                              // const getLiquidationTime = startTime + 7200
+                              const getLiquidationTime = startTime + 120
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 

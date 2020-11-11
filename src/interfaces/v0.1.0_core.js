@@ -407,15 +407,21 @@ const core = {
     "version": "0.2.3+commit.006968f"
   },
   "networks": {
+    "1": {
+      "events": {},
+      "links": {},
+      "address": "0x3D7507100e826B3ba12E8141393557ACCE6E7f03",
+      "transactionHash": "0x1ba072c5100d2c8bc8f4919560956da487d6822df53589c777fb82e1370a4e0d"
+    },
     "42": {
       "events": {},
       "links": {},
-      "address": "0x21E70356427541D1E4BEfD45E5E3B2b23F3F3cfA",
-      "transactionHash": "0x377d2ff8e1d0aaacf1066c7a2057d0d1f9679e6311cd9ecf7b1dbad199e79b3a"
+      "address": "0xb4F7F54105c656626b2C8025Cb71fB04aD30b32E",
+      "transactionHash": "0x6ab106a038b33216ae0b2cd083d9c2ccf56301c110ab9ffa384b6bfc61b532d8"
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-11-07T00:44:01.035Z",
+  "updatedAt": "2020-11-11T13:36:33.247Z",
   "networkType": "ethereum"
 }
 

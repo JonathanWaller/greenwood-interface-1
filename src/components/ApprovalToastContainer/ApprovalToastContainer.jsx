@@ -21,7 +21,7 @@ export default class ApprovalToastContainer extends Component {
         <div className="aligner-item">
           {this.context && this.context.approvalStatus === 'Pending' && <h6 className="toast-text-dark">Approval Status: <span className="toast-text-light font-roboto-mono">{this.context.approvalStatus}</span></h6>}
           {this.context && this.context.approvalStatus === 'Pending' && <Loader className="approval-loader" type="Bars" color="#D4D5D8"/>}
-          {this.context && this.context.approvalStatus === 'Complete' && this.context.approvalHash && <h6 className="toast-text-dark">Approval Status: <a className="toast-text-orange toast-link font-roboto-mono" href={`https://etherscan.io/tx/${this.context.approvalHash}`} target="_blank" rel="noopener noreferrer">{this.context.approvalStatus}<ArrowUpRight className="va-middle-bg-transparent transx-2px-right"/></a></h6>}
+          {this.context && this.context.approvalStatus === 'Complete' && this.context.approvalHash && <h6 className="toast-text-dark">Approval Status: <a className="toast-text-orange toast-link font-roboto-mono" href={`https://kovan.etherscan.io/tx/${this.context.approvalHash}`} target="_blank" rel="noopener noreferrer">{this.context.approvalStatus}<ArrowUpRight className="va-middle-bg-transparent transx-2px-right"/></a></h6>}
         </div>
       </div>
     )
