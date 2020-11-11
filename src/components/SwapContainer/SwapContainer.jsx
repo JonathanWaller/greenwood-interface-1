@@ -10,7 +10,7 @@ import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TransactionToastContainer from '../TransactionToastContainer/TransactionToastContainer'
 import ApprovalToastContainer from '../ApprovalToastContainer/ApprovalToastContainer'
-import * as BigNumber from 'bignumber.js';
+// import * as BigNumber from 'bignumber.js';
 
 
 class SwapContainer extends React.Component {
@@ -218,7 +218,8 @@ class SwapContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const MAX_UINT = new BigNumber(2).pow(256).minus(1);
+        // const MAX_UINT = new BigNumber(2).pow(256).minus(1);
+        const MAX_UINT = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
         const result = await instance.methods.approve(greenwoodAddress, MAX_UINT).send({from: this.context.address});
         this.context.setState({
           approvalStatus: 'Complete',
