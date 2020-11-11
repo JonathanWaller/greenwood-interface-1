@@ -255,21 +255,21 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
-        'dai': '0xFE677FD66205ccfC6a778F33dCD07C9e2aC7A438',
+        'dai': '0x20c2ea10A0e32733cf7a27C6c7A793ACd467cDE5',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xbCdce3B703f6F3bb24c03fe172DF4798BC16AF31',
+        'dai': '0xF4683316418750580BA1629473DDFA8fCFAb1738',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
         // 'zrx': '',
       },
       metricAddresses: {
-        'dai': '0xf6e049464170C98DE5fFEFA96caeACECa166d2cD',
+        'dai': '0xB36aA90e06aD439b2dF14FaC7Ff620Acd6075dB3',
         // 'eth': '',
         // 'usdc': '',
         // 'usdt': '',
