@@ -6,7 +6,8 @@ select {
   border: none;
   border-bottom: 4px solid #66676F;
   height: 2.5em;
-  color: #D4D5D8;
+  /* color: #D4D5D8; */
+  color: #66676F;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -20,14 +21,11 @@ input {
   border-bottom: 4px solid #66676F;
   max-width: 10%;
   padding: 1%;
-  color: #D4D5D8;
+  /* color: #D4D5D8; */
+  color: #66676F;
   margin-right: 0.5em;
   margin-left: 0.5em;
   background: #F3F4F6;
-}
-
-select::-ms-expand {
-  display: none; /* Remove default arrow in Internet Explorer 10 and 11 */
 }
 
 /* Target Internet Explorer 9 to undo the custom arrow */

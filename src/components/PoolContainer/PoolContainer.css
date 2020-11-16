@@ -94,16 +94,16 @@ input[type=number] {
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #D4D5D8;
+    color: #66676F;
     opacity: 1; /* Firefox */
   }
   
   :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #D4D5D8;
+    color: #66676F;
   }
   
   ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #D4D5D8;
+    color: #66676F;
   }
 
 .pool__nav__links {

@@ -118,7 +118,7 @@ class HistoryContainer extends React.Component {
                             : 
                             
                             <div className="chain-warning-div">
-                                <button disabled className="chain-warning-btn">Connect to the Kovan testnet to use Greenwood</button>
+                                <button disabled className="chain-warning-btn">Connect to the Ethereum Mainnet to use Greenwood</button>
                             </div>
                             
                             }

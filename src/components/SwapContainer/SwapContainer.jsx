@@ -58,7 +58,14 @@ class SwapContainer extends React.Component {
     if ( Number(totalLiquidity) === 0) {
       return Number(feeBase)
     } else {
-      return (((Number(activeCollateral) * Number(feeSensitivity))/Number(totalLiquidity)) + Number(feeBase))
+        // console.log('CONTRACT: ', contract)
+        const utilization = activeCollateral / totalLiquidity 
+        if (utilization > 0.7){
+          const feeMultiplier = feeSensitivity * 4
+          return (Number(utilization) * Number(feeSensitivity) + Number(feeBase)) + ((Number(utilization) - 0.7) * Number(feeMultiplier))
+        } else {
+          return (((Number(activeCollateral) * Number(feeSensitivity))/Number(totalLiquidity)) + Number(feeBase))
+        }
     }
   }
 
@@ -106,9 +113,17 @@ class SwapContainer extends React.Component {
 
     // Check with Mr. Wolff on this
     if (this.context.selectedSwapPosition === 'pFix') {
+      if (this.context.selectedSwapAsset.toLowerCase() === 'dai') {
         return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)))) / daysInYear).toFixed(10)
+      } else {
+        return ((this.context.selectedSwapAmount * swapDuration * ( Number((swapFixedRate/100)))) / daysInYear).toFixed(6)
+      }
     } else if (this.context.selectedSwapPosition === 'rFix') {
-        return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(10)
+        if (this.context.selectedSwapAsset.toLowerCase() === 'dai') {
+          return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(10)
+        } else {
+          return ((this.context.selectedSwapAmount * swapDuration * maxPayoutRate) / daysInYear).toFixed(6)
+        }
     }
   }
 
@@ -244,7 +259,9 @@ class SwapContainer extends React.Component {
           progress: undefined,
           transition: Zoom
         });
-        const approvalAmount = ((Number(this.context.swapDetailCollateral) + Number(this.context.swapDetailFee)) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false});
+        const approvalAmount = (Number(this.context.swapDetailCollateral) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false});
+        // console.log( 'FEE: ', Number(this.context.swapDetailFee) )
+        // console.log( 'APPROVAL AMOUNT: ', approvalAmount )
         const result = await instance.methods.approve(greenwoodAddress, approvalAmount).send({from: this.context.address});
         this.context.setState({
           approvalStatus: 'Complete',
@@ -342,7 +359,7 @@ class SwapContainer extends React.Component {
         />
         <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
           <div className="chain-warning-div">
-            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Kovan testnet to use Greenwood</button>
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Ethereum Mainnet to use Greenwood</button>
           </div>
           <select className="swap-select" name="selectedSwapPosition" onChange={this.handleChange}>
             {this.context.positions.map(function (item, key) {
@@ -411,7 +428,7 @@ class SwapContainer extends React.Component {
               className={this.context.connected && this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
               onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handleSwapSubmit : this.context.onConnect} 
               disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidCollateralAmount) ? true : false}>
-                {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : 'Connect to a wallet'}
+                {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : 'Connect to a wallet'}
               </button>
             <div className={this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
               <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>

@@ -22,10 +22,18 @@ import ModalResult from "./components/Web3ModalResult/Web3ModalResult";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import daiAbi from './interfaces/dai'
+// import usdcAbi from './interfaces/usdc'
+import usdtAbi from './interfaces/usdt'
+import erc20m from './interfaces/erc20'
+
+
 import cDai from './interfaces/cDai'
+import cUsdc from './interfaces/cUsdc'
+import cUsdt from './interfaces/cUsdt'
 
 import moment from 'moment'
 import coreAbi from './interfaces/v0.1.0_core'
+import calculatorAbi from './interfaces/v0.1.0_calculator'
 import fromExponential from 'from-exponential';
 
 const SModalContainer = styled.div`
@@ -75,7 +83,153 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     
-    // OLD PROD
+    // PROD
+    this.state = {
+      route: '',
+      currentAccount: '',
+      currentAccountTruncated: '',
+      fetching: false,
+      address: "",
+      web3: null,
+      provider: null,
+      connected: false,
+      chainId: 1,
+      networkId: 1,
+      assets: [],
+      showModal: false,
+      pendingRequest: false,
+      result: null,
+      setState: this.stateUpdate,
+      onConnect: this.onConnect,
+      getHistory: this.getHistory,
+      subscribeProvider: this.subscribeProvider,
+      smartTrim: this.smartTrim,
+      getAccountAssets: this.getAccountAssets,
+      selectedSwapPosition: 'rFix',
+      selectedSwapAmount: '100',
+      selectedSwapAsset: 'dai',
+      selectedLiquidityAction: 'Supply',
+      selectedLiquidityAmount: '100',
+      selectedLiquidityAsset: 'dai',
+      positions: [ 
+        {'display':'Receive', 'key': 'rFix'},
+        {'display':'Pay', 'key': 'pFix'} 
+      ],
+      actions: [ 
+        {'display':'Supply', 'key': 'Supply'},
+        {'display':'Withdraw', 'key': 'Withdraw'}
+      ],
+      greenwoodAssets: [
+        {'display':'DAI', 'key': 'dai'},
+        // {'display':'ETH', 'key': 'eth'},
+        {'display':'USDC', 'key': 'usdc'},
+        {'display':'USDT', 'key': 'usdt'},
+        // {'display':'ZRX', 'key': 'zrx'}
+      ],
+      greenwoodAddresses: {
+        'dai': '0xfC98090Aa5833bD553632fcad2294f749f468e67',
+        // 'eth': '',
+        'usdc': '0xee0433dF093b06930D8c6Efe3037C6B09E296b22',
+        'usdt': '0xBc5239e4B4A4aEfBF0581E557c85D598Ad28Aeaa',
+        // 'zrx': '',
+      },
+      calculatorAddresses: {
+        'dai': '0xE3047997Cd548806894ECcA7Caf6aBaeB083E5c7',
+        // 'eth': '',
+        'usdc': '0x88561ee4889Afaed59C7E2594D0E0A9288C5C740',
+        'usdt': '0x2631c2F151CD32Af4a8821b44DD1f8DBb3eBB40a',
+        // 'zrx': '',
+      },
+      metricAddresses: {
+        'dai': '0x80900735011E3c8bb27c194948481D80aDEe2cEe',
+        // 'eth': '',
+        'usdc': '0x72398e2845dB11c03ACAD52A536652E44f7B7641',
+        'usdt': '0xd7B579A93b8B2be035827696b132301BBFdA6B68',
+        // 'zrx': '',
+      },
+      underlyingAddresses: {
+        'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
+        // 'eth': '',
+        'usdc': '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        'usdt': '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+        // 'zrx': '',
+      },
+      underlyingABIs: {
+        // 'dai': daiAbi,
+        // 'usdc': usdtAbi,
+        // 'usdt': usdtAbi
+        'dai': daiAbi,
+        'usdc': erc20m,
+        'usdt': usdtAbi
+      },
+      cTokenABIs: {
+        'dai': cDai,
+        'usdc': cUsdc,
+        'usdt': cUsdt
+      },
+      assetMantissas: {
+        'dai': '1000000000000000000',
+        'eth': '1000000000000000000',
+        'usdc': '1000000',
+        'usdt': '1000000',
+        'zrx': '1000000000000000000',
+      },
+      cTokenAddresses: {
+        '1': {
+          'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
+          'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
+          'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
+          'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
+          'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
+          'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
+          'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
+          'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
+          'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
+        },
+        '42': {
+          'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
+          'bat': '0x4a77faee9650b09849ff459ea1476eab01606c7a',
+          'eth': '0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72',
+          'rep': '0xa4ec170599a1cf87240a35b9b1b8ff823f448b57',
+          'sai': '0xb3f7fb482492f4220833de6d6bfcc81157214bec',
+          'usdc': '0x4a92e71227d294f041bd82dd8f78591b75140d63',
+          'usdt': '0x3f0a0ea2f86bae6362cf9799b523ba06647da018',
+          'wbtc': '0xa1faa15655b0e7b6b6470ed3d096390e6ad93abb',
+          'zrx': '0xaf45ae737514c8427d373d50cd979a242ec59e5a',
+        }  
+      },
+      contractShift: 0.0000000001,
+      swapDetailRate: '',
+      swapDetailMaturity: '',
+      swapDetailFee: '',
+      swapDetailCollateral: '',
+      poolDetailBalance: '',
+      poolDetailShare: '',
+      renderRoute: false,
+      accountSwaps: [],
+      historyColumns: [
+        {
+          swapType: 'Swap Type',
+          userCollateral: 'Collateral Locked',
+          expiryTime: 'Time Until Expiry',
+          currentProfit: 'Approximate Current Profit', 
+          liquidationTime: 'Time Until Liquidation'
+        }
+      ],
+      renderTable: false,
+      transactionStatus: 'Pending',
+      transactionHash: '',
+      approvalStatus: 'Pending',
+      approvalHash: '',
+      isDesktop: false,
+      approveRadio: false,
+      swapDurationInSeconds: 604800,
+      isValidCollateralAmount: true,
+      isValidLiquidityAmount: true,
+      isOnSupportedNetwork: false
+    }
+
+    // DEMO
     // this.state = {
     //   route: '',
     //   currentAccount: '',
@@ -119,28 +273,28 @@ class App extends React.Component {
     //     // {'display':'ZRX', 'key': 'zrx'}
     //   ],
     //   greenwoodAddresses: {
-    //     'dai': '0x3D7507100e826B3ba12E8141393557ACCE6E7f03',
+    //     'dai': '0x08E0d98C08E581FAF891d45Be83Efd456dc4624F',
     //     // 'eth': '',
     //     // 'usdc': '',
     //     // 'usdt': '',
     //     // 'zrx': '',
     //   },
     //   calculatorAddresses: {
-    //     'dai': '0xe5dD18E3DdeF584cc0751de76Efe98fd5aAA927f',
+    //     'dai': '0xd6e61386F95FC8A7D7aE3b5fa1b9874D1FFa8026',
     //     // 'eth': '',
     //     // 'usdc': '',
     //     // 'usdt': '',
     //     // 'zrx': '',
     //   },
     //   metricAddresses: {
-    //     'dai': '0x431BB1c95BeD53928e83CD94adE021b8A1b1721e',
+    //     'dai': '0x0e47c685391F0eAbaEC17D13bA6f13e32d3492d4',
     //     // 'eth': '',
     //     // 'usdc': '',
     //     // 'usdt': '',
     //     // 'zrx': '',
     //   },
     //   underlyingAddresses: {
-    //     'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
+    //     'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
     //     // 'eth': '',
     //     // 'usdc': '',
     //     // 'usdt': '',
@@ -205,147 +359,11 @@ class App extends React.Component {
     //   approvalHash: '',
     //   isDesktop: false,
     //   approveRadio: false,
-    //   swapDurationInSeconds: 60,
+    //   swapDurationInSeconds: 604800,
     //   isValidCollateralAmount: true,
     //   isValidLiquidityAmount: true,
     //   isOnSupportedNetwork: false
     // }
-
-    // DEMO
-    this.state = {
-      route: '',
-      currentAccount: '',
-      currentAccountTruncated: '',
-      fetching: false,
-      address: "",
-      web3: null,
-      provider: null,
-      connected: false,
-      chainId: 1,
-      networkId: 1,
-      assets: [],
-      showModal: false,
-      pendingRequest: false,
-      result: null,
-      setState: this.stateUpdate,
-      onConnect: this.onConnect,
-      getHistory: this.getHistory,
-      subscribeProvider: this.subscribeProvider,
-      smartTrim: this.smartTrim,
-      getAccountAssets: this.getAccountAssets,
-      selectedSwapPosition: 'rFix',
-      selectedSwapAmount: '100',
-      selectedSwapAsset: 'dai',
-      selectedLiquidityAction: 'Supply',
-      selectedLiquidityAmount: '100',
-      selectedLiquidityAsset: 'dai',
-      positions: [ 
-        {'display':'Receive', 'key': 'rFix'},
-        {'display':'Pay', 'key': 'pFix'} 
-      ],
-      actions: [ 
-        {'display':'Supply', 'key': 'Supply'},
-        {'display':'Withdraw', 'key': 'Withdraw'}
-      ],
-      greenwoodAssets: [
-        {'display':'DAI', 'key': 'dai'},
-        // {'display':'ETH', 'key': 'eth'},
-        // {'display':'USDC', 'key': 'usdc'},
-        // {'display':'USDT', 'key': 'usdt'},
-        // {'display':'ZRX', 'key': 'zrx'}
-      ],
-      greenwoodAddresses: {
-        'dai': '0x20c2ea10A0e32733cf7a27C6c7A793ACd467cDE5',
-        // 'eth': '',
-        // 'usdc': '',
-        // 'usdt': '',
-        // 'zrx': '',
-      },
-      calculatorAddresses: {
-        'dai': '0xF4683316418750580BA1629473DDFA8fCFAb1738',
-        // 'eth': '',
-        // 'usdc': '',
-        // 'usdt': '',
-        // 'zrx': '',
-      },
-      metricAddresses: {
-        'dai': '0xB36aA90e06aD439b2dF14FaC7Ff620Acd6075dB3',
-        // 'eth': '',
-        // 'usdc': '',
-        // 'usdt': '',
-        // 'zrx': '',
-      },
-      underlyingAddresses: {
-        'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
-        // 'eth': '',
-        // 'usdc': '',
-        // 'usdt': '',
-        // 'zrx': '',
-      },
-      underlyingABIs: {
-        'dai': daiAbi
-      },
-      assetMantissas: {
-        'dai': '1000000000000000000',
-        'eth': '1000000000000000000',
-        'usdc': '1000000',
-        'usdt': '1000000',
-        'zrx': '1000000000000000000',
-      },
-      cTokenAddresses: {
-        '1': {
-          'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-          'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
-          'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
-          'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
-          'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
-          'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
-          'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
-          'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
-          'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
-        },
-        '42': {
-          'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
-          'bat': '0x4a77faee9650b09849ff459ea1476eab01606c7a',
-          'eth': '0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72',
-          'rep': '0xa4ec170599a1cf87240a35b9b1b8ff823f448b57',
-          'sai': '0xb3f7fb482492f4220833de6d6bfcc81157214bec',
-          'usdc': '0x4a92e71227d294f041bd82dd8f78591b75140d63',
-          'usdt': '0x3f0a0ea2f86bae6362cf9799b523ba06647da018',
-          'wbtc': '0xa1faa15655b0e7b6b6470ed3d096390e6ad93abb',
-          'zrx': '0xaf45ae737514c8427d373d50cd979a242ec59e5a',
-        }  
-      },
-      contractShift: 0.0000000001,
-      swapDetailRate: '',
-      swapDetailMaturity: '',
-      swapDetailFee: '',
-      swapDetailCollateral: '',
-      poolDetailBalance: '',
-      poolDetailShare: '',
-      renderRoute: false,
-      accountSwaps: [],
-      historyColumns: [
-        {
-          swapType: 'Swap Type',
-          userCollateral: 'Collateral Locked',
-          expiryTime: 'Time Until Expiry',
-          currentProfit: 'Approximate Current Profit', 
-          liquidationTime: 'Time Until Liquidation'
-        }
-      ],
-      renderTable: false,
-      transactionStatus: 'Pending',
-      transactionHash: '',
-      approvalStatus: 'Pending',
-      approvalHash: '',
-      isDesktop: false,
-      approveRadio: false,
-      swapDurationInSeconds: 60,
-      isValidCollateralAmount: true,
-      isValidLiquidityAmount: true,
-      isOnSupportedNetwork: false
-    }
 
     this.web3Modal = new Web3Modal({
       network: this.getNetwork(),
@@ -417,7 +435,7 @@ class App extends React.Component {
     }
 
     let isOnSupportedNetwork;
-    if (this.state.chainId && (this.state.chainId === '42' || this.state.chainId === 42)) {
+    if (this.state.chainId && (this.state.chainId === '1' || this.state.chainId === 1)) {
       isOnSupportedNetwork = true
     } else {
       isOnSupportedNetwork = false
@@ -468,7 +486,7 @@ class App extends React.Component {
       const currentAccountTruncated = this.smartTrim(address, 16) + ' '
 
       let isOnSupportedNetwork;
-      if (chainId && (chainId === '42' || chainId === 42)) {
+      if (chainId && (chainId === '1' || chainId === 1)) {
         isOnSupportedNetwork = true
       } else {
         isOnSupportedNetwork = false
@@ -522,7 +540,7 @@ class App extends React.Component {
         const chainId = await web3.eth.chainId();
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -569,7 +587,7 @@ class App extends React.Component {
 
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -695,8 +713,6 @@ class App extends React.Component {
 
   getHistory = async () => {
     if( this.state && this.state.address && this.state.isOnSupportedNetwork ) {
-      // console.log( 'GETTING HISTORY' )
-        // const web3 = this.context.web3
         const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
         const abi = coreAbi['abi'];
 
@@ -723,48 +739,75 @@ class App extends React.Component {
 
             let borrowApy;
             try {
-                const address = this.state.cTokenAddresses[this.state.chainId][asset.key]
-                const instance = new web3.eth.Contract(cDai, address);
-                const borrowRatePerBlock = await instance.methods.borrowRatePerBlock().call();
-                const ethMantissa = 1e18;
-                const blocksPerDay = 4 * 60 * 24;
+              const ethMantissa = 1e18;
+              const address = this.state.calculatorAddresses[asset.key];
+              const abi = calculatorAbi['abi'];
+              const instance = new web3.eth.Contract(abi, address);
+              borrowApy = await instance.methods.getBorrowApy().call();
+              borrowApy = Number(borrowApy) / ethMantissa
+              // console.log( 'BORROW APY FROM CALCULATOR: ', borrowApy )
+            } catch (e) { 
+                console.error(`Error fetching borrow rate from calculator contract- ${e.message}`);
+            }
 
-                let borrowRateOverMantissa = borrowRatePerBlock / ethMantissa;
-                borrowRateOverMantissa = this.vyperTruncate(borrowRateOverMantissa)
+            // try {
+            //     const address = this.state.cTokenAddresses[this.state.chainId][asset.key]
+            //     const instance = new web3.eth.Contract(cDai, address);
+            //     const borrowRatePerBlock = await instance.methods.borrowRatePerBlock().call();
+            //     const ethMantissa = 1e18;
+            //     const blocksPerDay = 4 * 60 * 24;
 
-                let mulBlocksPerDay = borrowRateOverMantissa * blocksPerDay
-                mulBlocksPerDay = this.vyperTruncate(mulBlocksPerDay)
+            //     let borrowRateOverMantissa = borrowRatePerBlock / ethMantissa;
+            //     borrowRateOverMantissa = this.vyperTruncate(borrowRateOverMantissa)
 
-                const t0 = mulBlocksPerDay + 1
+            //     let mulBlocksPerDay = borrowRateOverMantissa * blocksPerDay
+            //     mulBlocksPerDay = this.vyperTruncate(mulBlocksPerDay)
 
-                let t0Squared = t0 * t0
-                t0Squared = this.vyperTruncate(t0Squared)
+            //     const t0 = mulBlocksPerDay + 1
 
-                let t1 = t0Squared
+            //     let t0Squared = t0 * t0
+            //     t0Squared = this.vyperTruncate(t0Squared)
 
-                Array.from(Array(362).keys()).forEach(() => {
-                  let innerMul = t1 * t0
-                  innerMul = this.vyperTruncate(innerMul)
-                  t1 = innerMul
-                });
+            //     let t1 = t0Squared
 
-                let t2 = t1 - 1
-                t2 = this.vyperTruncate(t2)
+            //     Array.from(Array(362).keys()).forEach(() => {
+            //       let innerMul = t1 * t0
+            //       innerMul = this.vyperTruncate(innerMul)
+            //       t1 = innerMul
+            //     });
 
-                let t3 = t2 * 100
-                t3 = this.vyperTruncate(t3)
+            //     let t2 = t1 - 1
+            //     t2 = this.vyperTruncate(t2)
 
-                borrowApy = t3
+            //     let t3 = t2 * 100
+            //     t3 = this.vyperTruncate(t3)
+
+            //     borrowApy = t3
 
 
-                // console.log( 't0: ', t0 )
-                // console.log( 't1: ', t1 )
-                // console.log( 't2: ', t2 )
-                // console.log( 't3: ', t3 )
-                // console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
-                // console.log( 'BORROW APY:', borrowApy );
+            //     // console.log( 't0: ', t0 )
+            //     // console.log( 't1: ', t1 )
+            //     // console.log( 't2: ', t2 )
+            //     // console.log( 't3: ', t3 )
+            //     // console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
+            //     // console.log( 'BORROW APY:', borrowApy );
+            // } catch (e) {
+            //     console.error(`Error fetching borrow rate from Compound contract- ${e.message}`);
+            // }
+
+            let borrowIndex
+            try {
+              const ethMantissa = 1e18;
+              const address = this.state.cTokenAddresses[this.state.chainId][asset.key]
+              const abi = this.state.cTokenABIs[asset.key]
+              const instance = new web3.eth.Contract(abi, address);
+              borrowIndex = await instance.methods.borrowIndex().call();
+              borrowIndex = Number(borrowIndex) / ethMantissa
+              borrowIndex = this.vyperTruncate(borrowIndex);
+              // console.log( 'BORROW INDEX FROM CTOKEN: ', borrowIndex )
+
             } catch (e) {
-                console.error(`Error fetching borrow rate from Compound contract- ${e.message}`);
+                console.error(`Error fetching borrow index from Compound contract- ${e.message}`);
             }
 
             if ( swapNumbers && swapNumbers > 0 ) {
@@ -827,8 +870,8 @@ class App extends React.Component {
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              // const getLiquidationTime = startTime + 7200
-                              const getLiquidationTime = startTime + 120
+                              const getLiquidationTime = startTime + 7200
+                              // const getLiquidationTime = startTime + 120
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 
@@ -870,10 +913,34 @@ class App extends React.Component {
                               expiryTime = 'Expired'
                             }
                             // const expiryTime = moment.unix(parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds)).fromNow();
+                            // borrowApy = borrowIndex / (Number(swap.initIndex) * this.state.contractShift)
+                            const swapInit = this.vyperTruncate((Number(swap.initIndex) * this.state.contractShift))
+
+                            // console.log( 'BORROW INDEX FROM SWAP: ', swapInit);
+                            // console.log( 'DIVISION: ', borrowIndex / swapInit );
+                            // console.log( 'BORROW APY: ', borrowApy )
+                            // console.log( 'SWAP RATE: ', (parseFloat(swap.swapRate) * this.state.contractShift) )
+                            
+
+
+
+
+
                             const fixedLeg  = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (parseFloat(swap.swapRate) * this.state.contractShift) * (this.state.swapDurationInSeconds / 86400)) / 365
-                            // const floatLeg = (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * ((borrowApy / 100) / (parseFloat(swap.initIndex) * this.state.contractShift) - 1.0)
-                            // const floatLeg = ((parseFloat(swap.notional) / this.context.assetMantissas[asset.key]) * newFloatIndex * (this.context.swapDurationInSeconds / 86400)) / 365
-                            const floatLeg = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowApy / 100) * (this.state.swapDurationInSeconds / 86400)) / 365
+
+                            let floatLeg;
+
+                            if (borrowIndex / swapInit === 1) {
+                              // console.log( 'CASE 1' )
+                              floatLeg = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowApy) * (this.state.swapDurationInSeconds / 86400)) / 365
+                            } else {
+                              // console.log( 'CASE 2' )
+                              floatLeg = (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowIndex / swapInit - 1.0)
+                            }
+                            // const floatLeg = borrowIndex / swapInit === 1 ? ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowApy / 100) * (this.state.swapDurationInSeconds / 86400)) / 365 : (parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowIndex / swapInit - 1.0)
+                            // const floatLeg = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowApy / 100) * (this.state.swapDurationInSeconds / 86400)) / 365
+                            // const floatRate = (borrowIndex / swapInit - 1) < Number(this.state.minPayoutRate) * this.state.contractShift
+                            // const floatLeg = ((parseFloat(swap.notional) / this.state.assetMantissas[asset.key]) * (borrowIndex / swapInit - 1) * (this.state.swapDurationInSeconds / 86400)) / 365
                             
 
                             // console.log( 'RATES: : ', (parseFloat(swap.swapRate) * this.state.contractShift), borrowApy / 100 );
