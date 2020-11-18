@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import './SwapContainer.css'
 import '../TextSelect/TextSelect.css'
-import coreAbi from '../../interfaces/v0.1.0_core'
+// import coreAbi from '../../interfaces/v0.1.0_core'
 import Web3 from 'web3';
 import moment from 'moment';
 import AppContext from '../../contexts/AppContext';
@@ -32,7 +32,8 @@ class SwapContainer extends React.Component {
   async componentDidMount() {
     this.context.setState({
       approveRadio: false,
-      selectedSwapPosition: 'rFix'
+      selectedSwapPosition: 'rFix',
+      selectedSwapAsset: 'dai'
     })
     this.validateSwapForm();
   }
@@ -130,7 +131,8 @@ class SwapContainer extends React.Component {
   async getSwapDetails() {
     // const web3 = this.context.web3
     const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-    const abi = coreAbi['abi'];
+    // const abi = coreAbi['abi'];
+    const abi = this.context.greenwoodABIs[this.context.selectedSwapAsset]
     const address = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(abi, address);
     try {
@@ -171,6 +173,7 @@ class SwapContainer extends React.Component {
       });
       
       let allowance;
+      // let balanceOf;
       try {
         const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
         const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
@@ -178,11 +181,16 @@ class SwapContainer extends React.Component {
         const tokenAddress = this.context.underlyingAddresses[this.context.selectedSwapAsset];
         const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
         allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+        // balanceOf = await instance.methods.balanceOf(this.context.address).call();
       } catch( e ) {
         console.error( `Error getting allowance for current user in swap view - ${e.message}` );
       }
 
+      // console.log( 'SWAP ALLOWANCE: ', allowance );
+      // console.log( 'SWAP BALANCE OF: ', balanceOf );
+
       if (Number(allowance) >= Number(this.context.swapDetailCollateral)) {
+        // console.log( 'SWAP ALLOWANCE GREATER THAN' )
         try {
           await this.processSwap()
         } catch (e) {
@@ -260,8 +268,6 @@ class SwapContainer extends React.Component {
           transition: Zoom
         });
         const approvalAmount = (Number(this.context.swapDetailCollateral) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false});
-        // console.log( 'FEE: ', Number(this.context.swapDetailFee) )
-        // console.log( 'APPROVAL AMOUNT: ', approvalAmount )
         const result = await instance.methods.approve(greenwoodAddress, approvalAmount).send({from: this.context.address});
         this.context.setState({
           approvalStatus: 'Complete',
@@ -279,10 +285,11 @@ class SwapContainer extends React.Component {
 
   async processSwap() {
     const web3 = this.context.web3
-    const abi = coreAbi['abi'];
+    // const abi = coreAbi['abi'];
+    const abi = this.context.greenwoodABIs[this.context.selectedSwapAsset]
     const address = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(abi, address);
-    const amount = (Number(this.context.selectedSwapAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false})
+    const amount = (Number(this.context.selectedSwapAmount) * Number(this.context.assetMantissas[this.context.selectedSwapAsset])).toLocaleString('fullwide', {useGrouping:false})
 
     if ( this.context.selectedSwapPosition === 'pFix' ) {
       try {

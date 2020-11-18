@@ -23,16 +23,17 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import daiAbi from './interfaces/dai'
 // import usdcAbi from './interfaces/usdc'
-import usdtAbi from './interfaces/usdt'
+// import usdtAbi from './interfaces/usdt'
 import erc20m from './interfaces/erc20'
 
 
 import cDai from './interfaces/cDai'
 import cUsdc from './interfaces/cUsdc'
-import cUsdt from './interfaces/cUsdt'
+// import cUsdt from './interfaces/cUsdt'
 
 import moment from 'moment'
 import coreAbi from './interfaces/v0.1.0_core'
+// import coreAbiUsdt from './interfaces/v0.1.0_core_usdt'
 import calculatorAbi from './interfaces/v0.1.0_calculator'
 import fromExponential from 'from-exponential';
 
@@ -123,56 +124,58 @@ class App extends React.Component {
         {'display':'DAI', 'key': 'dai'},
         // {'display':'ETH', 'key': 'eth'},
         {'display':'USDC', 'key': 'usdc'},
-        {'display':'USDT', 'key': 'usdt'},
+        // {'display':'USDT', 'key': 'usdt'},
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
         'dai': '0xfC98090Aa5833bD553632fcad2294f749f468e67',
         // 'eth': '',
         'usdc': '0xee0433dF093b06930D8c6Efe3037C6B09E296b22',
-        'usdt': '0xBc5239e4B4A4aEfBF0581E557c85D598Ad28Aeaa',
+        // 'usdt': '0xBc5239e4B4A4aEfBF0581E557c85D598Ad28Aeaa',
         // 'zrx': '',
       },
       calculatorAddresses: {
         'dai': '0xE3047997Cd548806894ECcA7Caf6aBaeB083E5c7',
         // 'eth': '',
         'usdc': '0x88561ee4889Afaed59C7E2594D0E0A9288C5C740',
-        'usdt': '0x2631c2F151CD32Af4a8821b44DD1f8DBb3eBB40a',
+        // 'usdt': '0x2631c2F151CD32Af4a8821b44DD1f8DBb3eBB40a',
         // 'zrx': '',
       },
       metricAddresses: {
         'dai': '0x80900735011E3c8bb27c194948481D80aDEe2cEe',
         // 'eth': '',
         'usdc': '0x72398e2845dB11c03ACAD52A536652E44f7B7641',
-        'usdt': '0xd7B579A93b8B2be035827696b132301BBFdA6B68',
+        // 'usdt': '0xd7B579A93b8B2be035827696b132301BBFdA6B68',
         // 'zrx': '',
       },
       underlyingAddresses: {
         'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
         // 'eth': '',
         'usdc': '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-        'usdt': '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+        // 'usdt': '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         // 'zrx': '',
       },
       underlyingABIs: {
-        // 'dai': daiAbi,
-        // 'usdc': usdtAbi,
-        // 'usdt': usdtAbi
         'dai': daiAbi,
         'usdc': erc20m,
-        'usdt': usdtAbi
+        // 'usdt': erc20m
+      },
+      greenwoodABIs: {
+        'dai': coreAbi['abi'],
+        'usdc': coreAbi['abi'],
+        // 'usdt': coreAbiUsdt['abi']
       },
       cTokenABIs: {
         'dai': cDai,
         'usdc': cUsdc,
-        'usdt': cUsdt
+        // 'usdt': cUsdt
       },
       assetMantissas: {
         'dai': '1000000000000000000',
-        'eth': '1000000000000000000',
+        // 'eth': '1000000000000000000',
         'usdc': '1000000',
-        'usdt': '1000000',
-        'zrx': '1000000000000000000',
+        // 'usdt': '1000000',
+        // 'zrx': '1000000000000000000',
       },
       cTokenAddresses: {
         '1': {
@@ -269,39 +272,50 @@ class App extends React.Component {
     //     {'display':'DAI', 'key': 'dai'},
     //     // {'display':'ETH', 'key': 'eth'},
     //     // {'display':'USDC', 'key': 'usdc'},
-    //     // {'display':'USDT', 'key': 'usdt'},
+    //     {'display':'USDT', 'key': 'usdt'},
     //     // {'display':'ZRX', 'key': 'zrx'}
     //   ],
     //   greenwoodAddresses: {
     //     'dai': '0x08E0d98C08E581FAF891d45Be83Efd456dc4624F',
     //     // 'eth': '',
     //     // 'usdc': '',
-    //     // 'usdt': '',
+    //     'usdt': '0xc7AdEbb0D98c911E19C619055699c8a387FE3b09',
     //     // 'zrx': '',
     //   },
     //   calculatorAddresses: {
     //     'dai': '0xd6e61386F95FC8A7D7aE3b5fa1b9874D1FFa8026',
     //     // 'eth': '',
     //     // 'usdc': '',
-    //     // 'usdt': '',
+    //     'usdt': '0xBC7a4bEDf19Df5B0b81B3eEE5368e278f7928E7E',
     //     // 'zrx': '',
     //   },
     //   metricAddresses: {
     //     'dai': '0x0e47c685391F0eAbaEC17D13bA6f13e32d3492d4',
     //     // 'eth': '',
     //     // 'usdc': '',
-    //     // 'usdt': '',
+    //     'usdt': '0xDAE4c55f60F79459D65B31061E65185fc138d1AA',
     //     // 'zrx': '',
     //   },
     //   underlyingAddresses: {
     //     'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
     //     // 'eth': '',
     //     // 'usdc': '',
-    //     // 'usdt': '',
+    //     'usdt': '0x07de306FF27a2B630B1141956844eB1552B956B5',
     //     // 'zrx': '',
     //   },
     //   underlyingABIs: {
-    //     'dai': daiAbi
+    //     'dai': daiAbi,
+    //     'usdt': erc20m
+    //   },
+    //   greenwoodABIs: {
+    //     'dai': coreAbi['abi'],
+    //     'usdc': coreAbi['abi'],
+    //     'usdt': coreAbiUsdt['abi']
+    //   },
+    //   cTokenABIs: {
+    //     'dai': cDai,
+    //     'usdc': cUsdc,
+    //     'usdt': cUsdt
     //   },
     //   assetMantissas: {
     //     'dai': '1000000000000000000',
@@ -359,7 +373,7 @@ class App extends React.Component {
     //   approvalHash: '',
     //   isDesktop: false,
     //   approveRadio: false,
-    //   swapDurationInSeconds: 604800,
+    //   swapDurationInSeconds: 60,
     //   isValidCollateralAmount: true,
     //   isValidLiquidityAmount: true,
     //   isOnSupportedNetwork: false

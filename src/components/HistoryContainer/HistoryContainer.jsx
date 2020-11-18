@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import './HistoryContainer.css'
-import coreAbi from '../../interfaces/v0.1.0_core'
+// import coreAbi from '../../interfaces/v0.1.0_core'
 // import Web3 from 'web3';
 import moment from 'moment';
 import AppContext from '../../contexts/AppContext';
@@ -27,7 +27,8 @@ class HistoryContainer extends React.Component {
         transactionHash: ''
     });
     const web3 = this.context.web3
-    const abi = coreAbi['abi'];
+    const abi = this.context.greenwoodABIs[asset]
+    // const abi = coreAbi['abi'];
     const address = this.context.greenwoodAddresses[asset];
     const instance = new web3.eth.Contract(abi, address);
 

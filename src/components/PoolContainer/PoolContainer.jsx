@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import './PoolContainer.css'
-import coreAbi from '../../interfaces/v0.1.0_core'
+// import coreAbi from '../../interfaces/v0.1.0_core'
 import Web3 from 'web3';
 import AppContext from '../../contexts/AppContext';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
@@ -25,7 +25,8 @@ class PoolContainer extends React.Component {
   async componentDidMount() {
     this.context.setState({
       approveRadio: false,
-      selectedLiquidityAction: 'Supply'
+      selectedLiquidityAction: 'Supply',
+      selectedLiquidityAsset: 'dai'
     })
     this.validatePoolForm();
   }
@@ -46,7 +47,8 @@ class PoolContainer extends React.Component {
     if ( this.context.connected && this.context.web3 && this.context.web3 !== null && this.context.web3 !== 'null') { 
       // const web3 = this.context.web3
       const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-      const abi = coreAbi['abi'];
+      // const abi = coreAbi['abi'];
+      const abi = this.context.greenwoodABIs[this.context.selectedLiquidityAsset]
       const address = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
       const instance = new web3.eth.Contract(abi, address);
       try {
@@ -110,20 +112,37 @@ class PoolContainer extends React.Component {
       });
         
       let allowance;
+      // let balanceOf;
       try {
-        // const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
-        // const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
-        // const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
-        // const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
-        // const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
-        // allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+        const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
+        const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
+        const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
+        const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
+        const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+        allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
         // balanceOf = await instance.methods.balanceOf(this.context.address).call();
       } catch( e ) {
         console.error( `Error getting allowance for current user in pool view - ${e.message}` );
       }
 
+      // console.log( 'POOL ALLOWANCE: ', allowance )
+      // console.log( 'POOL BALANCE OF: ', balanceOf )
+
+      // try{
+      //   const web3 = new Web3(new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_ID))
+      //   const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
+      //   const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
+      //   const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
+      //   const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+      //   await instance.methods.approve(greenwoodAddress, 0).send({from: this.context.address});
+      // } catch (e) {
+      //   throw new Error(`Error resetting approval balance in infinite approval - ${e.message}`);
+      // }
+      // allowance = 0
+
       if (Number(allowance) >= Number(this.context.selectedLiquidityAmount)) {
         try {
+          // await this.approveTransfer();
           await this.processLiquidity()
         } catch (e) {
           console.error( `Error executing liquidity action with allowance - ${e.message}` );
@@ -172,6 +191,12 @@ class PoolContainer extends React.Component {
     const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
     const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
     const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+
+    // try {
+    //   await instance.methods.approve(greenwoodAddress, 0).send({from: this.context.address});
+    // } catch (e) {
+    //   throw new Error(`Error resetting approval balance in infinite approval - ${e.message}`);
+    // }
 
     if (this.context.approveRadio === true ) {
       try {
@@ -229,7 +254,8 @@ class PoolContainer extends React.Component {
 
   async processLiquidity() {
       const web3 = this.context.web3
-      const abi = coreAbi['abi'];
+      // const abi = coreAbi['abi'];
+      const abi = this.context.greenwoodABIs[this.context.selectedLiquidityAsset]
       const address = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
       const instance = new web3.eth.Contract(abi, address);
       const amount = (Number(this.context.selectedLiquidityAmount) * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])).toLocaleString('fullwide', {useGrouping:false});
