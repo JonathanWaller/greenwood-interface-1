@@ -93,7 +93,13 @@ class SwapContainer extends React.Component {
       fee = -fee;
     }
 
-    return (((rateRange * rateFactor / (Math.sqrt((rateFactor * rateFactor) + slopeFactor))) + yOffset + fee) * 100);
+    const feeReturn = (((rateRange * rateFactor / (Math.sqrt((rateFactor * rateFactor) + slopeFactor))) + yOffset + fee) * 100);
+
+    if (feeReturn < 0) {
+      return 0
+    } else {
+      return (((rateRange * rateFactor / (Math.sqrt((rateFactor * rateFactor) + slopeFactor))) + yOffset + fee) * 100);
+    }
   }
 
   async getMaturity( contract ) {
@@ -366,7 +372,8 @@ class SwapContainer extends React.Component {
         />
         <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
           <div className="chain-warning-div">
-            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Ethereum Mainnet to use Greenwood</button>
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Kovan testnet to use Greenwood</button>
+            {/* <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Ethereum Mainnet to use Greenwood</button> */}
           </div>
           <select className="swap-select" name="selectedSwapPosition" onChange={this.handleChange}>
             {this.context.positions.map(function (item, key) {
@@ -432,11 +439,14 @@ class SwapContainer extends React.Component {
             </div>
             <div style={{marginTop: "5%"}}>
             <button 
-              className={this.context.connected && this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? 'submit-btn' : 'submit-btn-not-connected'} 
+              className={this.context.connected && this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork && Number(this.context.swapDetailRate) > 0 ? 'submit-btn' : 'submit-btn-not-connected'} 
               onClick={this.context.connected && this.context.isOnSupportedNetwork ? this.handleSwapSubmit : this.context.onConnect} 
-              disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidCollateralAmount) ? true : false}>
-                {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : 'Connect to a wallet'}
-              </button>
+              disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidCollateralAmount) || (this.context.connected && Number(this.context.swapDetailRate) <= 0) ? true : false}>
+                {/* {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient market liquidity' : 'Connect to a wallet'} */}
+
+                {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'}
+                {/* {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'} */}
+            </button>
             <div className={this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
               <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
             </div>
