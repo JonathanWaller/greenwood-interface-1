@@ -621,7 +621,7 @@ class App extends React.Component {
   }
 
   updatePredicate() {
-    this.setState({ isDesktop: window.innerWidth > 1300 });
+    this.setState({ isDesktop: window.innerWidth > 1100 });
   }
 
   onConnect = async () => {
