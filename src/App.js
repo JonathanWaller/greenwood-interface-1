@@ -427,21 +427,21 @@ class App extends React.Component {
         'dai': '0x3266fa2De1E5Ba77984FF87B87661fd4b3ae49fA',
         // 'eth': '',
         'usdc': '0x4f537Ba14De27977669A32D9B4b171b346c8B8Af',
-        'usdt': '0xD7c96Ec22E81d19b2D0d695d26F11ca4EF0FBeD7',
+        'usdt': '0x6635758839b5405F1FBDf581F442DEd3E0222C5e',
         // 'zrx': '',
       },
       calculatorAddresses: {
         'dai': '0xcCEb7D8491df90095659F8624daDAf53dF8367Bb',
         // 'eth': '',
         'usdc': '0x848873e87A629Be8811dC5c67C060b5C9634Ef77',
-        'usdt': '0x30A15EeD2A23436c4b3149De8299e8FcE2dE55e1',
+        'usdt': '0xeE2f5C3aA067a324CEB1031b25DD6F93DDB29982',
         // 'zrx': '',
       },
       metricAddresses: {
         'dai': '0x7b319DfAf3A5f5744cB03d267376dd39624b5575',
         // 'eth': '',
         'usdc': '0x8B5212d7898Da1B648E19Da306F4A9310E34ce86',
-        'usdt': '0xc7fAB4771D06510804d78C67F27ae07ccf44B0c9',
+        'usdt': '0xF43f92A01F8D428947bF9fefCE2A84FE84eCE7Ae',
         // 'zrx': '',
       },
       underlyingAddresses: {
@@ -525,7 +525,8 @@ class App extends React.Component {
       swapDurationInSeconds: 60,
       isValidCollateralAmount: true,
       isValidLiquidityAmount: true,
-      isOnSupportedNetwork: false
+      isOnSupportedNetwork: false,
+      isInfiniteApproved: false
     }
 
     this.web3Modal = new Web3Modal({

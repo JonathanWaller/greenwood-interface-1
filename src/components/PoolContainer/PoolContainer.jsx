@@ -56,7 +56,6 @@ class PoolContainer extends React.Component {
         const accountResult = await instance.methods.getAccount(this.context.address).call();
         const totalDeposits = Number(stateResult.totalDeposits) * this.context.contractShift;
         const accountBalance = Number(accountResult.amount) * this.context.contractShift;
-
         // console.log( 'ACCOUNT DETAILS: ', accountResult );
         
         let newAccountLiquidity, poolShare;
@@ -91,7 +90,34 @@ class PoolContainer extends React.Component {
         });
 
       } catch ( e ) {
-        console.error(`Error fetching contract state for pool details - ${e.message}`)
+          console.error(`Error fetching contract state for pool details - ${e.message}`);
+      }
+      try {
+        const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
+        const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
+        const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
+        const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+        const allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+        // const allowance = 0
+        // console.log( 'ALLOWANCE: ', allowance );
+
+        if (Number(allowance) / Number(this.context.assetMantissas[this.context.selectedLiquidityAsset]) > 1000000000 * Number(this.context.assetMantissas[this.context.selectedLiquidityAsset])) {
+          this.context.setState({
+            isInfiniteApproved: true
+          })
+        } else {
+          this.context.setState({
+            isInfiniteApproved: false
+          })
+          // force infinite approval for USDT if it has not been done already
+          if (this.context.selectedLiquidityAsset === 'usdt' && Number(allowance) === 0) {
+            this.context.setState({
+              approveRadio: true
+            })
+          }
+        }
+      } catch ( e ) {
+        console.error( `Error fetching user allowance in pool details - ${e.message}` );
       }
     } else {
       console.warn('Web3 is not defined in the app context...')
@@ -140,9 +166,8 @@ class PoolContainer extends React.Component {
       // }
       // allowance = 0
 
-      if (Number(allowance) >= Number(this.context.selectedLiquidityAmount)) {
+      if (Number(allowance) / Number(this.context.assetMantissas[this.context.selectedLiquidityAsset]) >= Number(this.context.selectedLiquidityAmount)) {
         try {
-          // await this.approveTransfer();
           await this.processLiquidity()
         } catch (e) {
           console.error( `Error executing liquidity action with allowance - ${e.message}` );
@@ -190,7 +215,7 @@ class PoolContainer extends React.Component {
     const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedLiquidityAsset];
     const tokenAbi = this.context.underlyingABIs[this.context.selectedLiquidityAsset];
     const tokenAddress = this.context.underlyingAddresses[this.context.selectedLiquidityAsset];
-    const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+    const instance = new web3.eth.Contract(tokenAbi, tokenAddress)
 
     // try {
     //   await instance.methods.approve(greenwoodAddress, 0).send({from: this.context.address});
@@ -198,7 +223,7 @@ class PoolContainer extends React.Component {
     //   throw new Error(`Error resetting approval balance in infinite approval - ${e.message}`);
     // }
 
-    if (this.context.approveRadio === true ) {
+    if (this.context.approveRadio === true || this.context.selectedLiquidityAsset === 'usdt' ) {
       try {
         toast(<ApprovalToastContainer/>, {
           position: "bottom-right",
@@ -411,8 +436,10 @@ class PoolContainer extends React.Component {
                 {/* {this.context.connected && this.context.isOnSupportedNetwork ? this.context.selectedLiquidityAction : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : 'Connect to a wallet'} */}
             </button>
 
-            <div style={{marginTop: "5%"}} className={this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'}>
-              <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
+            {/* {!this.context.isInfiniteApproved && this.context.selectedLiquidityAsset === 'usdt' && <div style={{marginTop: "5%"}}><h6 className="pool-detail-label">Infinite approval is required for USDT</h6></div>} */}
+
+            <div style={{marginTop: "5%"}} className={this.context.isValidLiquidityAmount && this.context.isOnSupportedNetwork && !this.context.isInfiniteApproved ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'}>
+              <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange} checked={this.context.approveRadio}/>Infinite approval</label>
             </div>
             <div className="aligner" style={{marginTop: "1%", textAlign: "center"}}>
               <button disabled className={this.context.isValidLiquidityAmount ? "warning-btn-hidden" : "warning-btn"}>{`The ${this.context.selectedLiquidityAction.toLowerCase()} amount can not be 0`}</button>

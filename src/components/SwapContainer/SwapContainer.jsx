@@ -162,6 +162,32 @@ class SwapContainer extends React.Component {
     } catch ( e ) {
       console.error(`Error fetching contract state for swap details - ${e.message}`)
     }
+    try {
+      const greenwoodAddress = this.context.greenwoodAddresses[this.context.selectedSwapAsset];
+      const tokenAbi = this.context.underlyingABIs[this.context.selectedSwapAsset];
+      const tokenAddress = this.context.underlyingAddresses[this.context.selectedSwapAsset];
+      const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
+      const allowance = await instance.methods.allowance(this.context.address, greenwoodAddress).call();
+      // console.log( 'ALLOWANCE: ', allowance );
+
+      if (Number(allowance) / Number(this.context.assetMantissas[this.context.selectedSwapAsset]) > 1000000000 * Number(this.context.assetMantissas[this.context.selectedSwapAsset])) {
+        this.context.setState({
+          isInfiniteApproved: true
+        })
+      } else {
+        this.context.setState({
+          isInfiniteApproved: false
+        })
+        // force infinite approval for USDT if it has not been done already
+        if (this.context.selectedSwapAsset === 'usdt' && Number(allowance) === 0) {
+          this.context.setState({
+            approveRadio: true
+          })
+        }
+      }
+    } catch ( e ) {
+      console.error( `Error fetching user allowance in swap details - ${e.message}` );
+    }
 
   }
 
@@ -195,7 +221,7 @@ class SwapContainer extends React.Component {
       // console.log( 'SWAP ALLOWANCE: ', allowance );
       // console.log( 'SWAP BALANCE OF: ', balanceOf );
 
-      if (Number(allowance) >= Number(this.context.swapDetailCollateral)) {
+      if (Number(allowance) / Number(this.context.assetMantissas[this.context.selectedSwapAsset]) >= Number(this.context.swapDetailCollateral)) {
         // console.log( 'SWAP ALLOWANCE GREATER THAN' )
         try {
           await this.processSwap()
@@ -235,7 +261,7 @@ class SwapContainer extends React.Component {
     const tokenAddress = this.context.underlyingAddresses[this.context.selectedSwapAsset];
     const instance = new web3.eth.Contract(tokenAbi, tokenAddress);
 
-    if (this.context.approveRadio === true ) {
+    if (this.context.approveRadio === true || this.context.selectedSwapAsset === 'usdt') {
       try {
         toast(<ApprovalToastContainer/>, {
           position: "bottom-right",
@@ -447,8 +473,8 @@ class SwapContainer extends React.Component {
                 {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'}
                 {/* {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'} */}
             </button>
-            <div className={this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
-              <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange}/>Infinite approval</label>
+            <div className={this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork && !this.context.isInfiniteApproved ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
+              <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange} checked={this.context.approveRadio}/>Infinite approval</label>
             </div>
             <div className="aligner" style={{marginTop: "1%", textAlign: "center"}}>
               <button disabled className={this.context.isValidCollateralAmount ? "warning-btn-hidden" : "warning-btn"}>The collateral required for a swap can not be 0</button>
