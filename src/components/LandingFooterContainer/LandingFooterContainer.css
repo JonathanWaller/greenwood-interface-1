@@ -66,6 +66,21 @@ and (-webkit-min-device-pixel-ratio: 3) {
     }
 }
 
+.filled-footer-landing-image {
+    color: #66676F;
+    height: 24px;
+}
+
+@media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 812px) 
+and (-webkit-min-device-pixel-ratio: 3) { 
+    .filled-footer-landing-image {
+        height: 20px;
+        color: #66676F; 
+    }
+}
+
 .copyright-landing {
     margin-right: auto;
     color: #66676F; 
