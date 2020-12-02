@@ -398,8 +398,8 @@ class SwapContainer extends React.Component {
         />
         <div className="" style={{width: "100%", textAlign: "center", minHeight: "75vh"}}>
           <div className="chain-warning-div">
-            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Kovan testnet to use Greenwood</button>
-            {/* <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Ethereum Mainnet to use Greenwood</button> */}
+            {/* <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Kovan testnet to use Greenwood</button> */}
+            <button disabled className={this.context.isOnSupportedNetwork ? "chain-warning-btn-hidden" : "chain-warning-btn"}>Connect to the Ethereum Mainnet to use Greenwood</button>
           </div>
           <select className="swap-select" name="selectedSwapPosition" onChange={this.handleChange}>
             {this.context.positions.map(function (item, key) {
@@ -470,8 +470,8 @@ class SwapContainer extends React.Component {
               disabled={(this.context.connected && !this.context.isOnSupportedNetwork) || (this.context.connected && !this.context.isValidCollateralAmount) || (this.context.connected && Number(this.context.swapDetailRate) <= 0) ? true : false}>
                 {/* {this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient market liquidity' : 'Connect to a wallet'} */}
 
-                {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'}
-                {/* {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'} */}
+                {/* {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Kovan testnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'} */}
+                {this.context.connected && !this.context.isOnSupportedNetwork ? 'Connect to Ethereum Mainnet' : this.context.connected && Number(this.context.swapDetailRate) <= 0 ? 'Insufficient liquidity' : this.context.connected && this.context.isOnSupportedNetwork ? 'Swap' : 'Connect to a wallet'}
             </button>
             <div className={this.context.isValidCollateralAmount && this.context.isOnSupportedNetwork && !this.context.isInfiniteApproved ? ' aligner infinite-approve-div' : 'aligner infinite-approve-div-hidden'} style={{marginTop: "5%"}}>
               <label className={this.context.approveRadio === true ? "approve-label" : "approve-label-disabled"}><input type="checkbox" name="approveRadio" id="name" className="approve-radio" onChange={this.handleChange} checked={this.context.approveRadio}/>Infinite approval</label>

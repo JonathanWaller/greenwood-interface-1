@@ -85,302 +85,6 @@ class App extends React.Component {
     super(props);
     
     // PROD
-    // this.state = {
-    //   route: '',
-    //   currentAccount: '',
-    //   currentAccountTruncated: '',
-    //   fetching: false,
-    //   address: "",
-    //   web3: null,
-    //   provider: null,
-    //   connected: false,
-    //   chainId: 1,
-    //   networkId: 1,
-    //   assets: [],
-    //   showModal: false,
-    //   pendingRequest: false,
-    //   result: null,
-    //   setState: this.stateUpdate,
-    //   onConnect: this.onConnect,
-    //   getHistory: this.getHistory,
-    //   subscribeProvider: this.subscribeProvider,
-    //   smartTrim: this.smartTrim,
-    //   getAccountAssets: this.getAccountAssets,
-    //   selectedSwapPosition: 'rFix',
-    //   selectedSwapAmount: '100',
-    //   selectedSwapAsset: 'dai',
-    //   selectedLiquidityAction: 'Supply',
-    //   selectedLiquidityAmount: '100',
-    //   selectedLiquidityAsset: 'dai',
-    //   positions: [ 
-    //     {'display':'Receive', 'key': 'rFix'},
-    //     {'display':'Pay', 'key': 'pFix'} 
-    //   ],
-    //   actions: [ 
-    //     {'display':'Supply', 'key': 'Supply'},
-    //     {'display':'Withdraw', 'key': 'Withdraw'}
-    //   ],
-    //   greenwoodAssets: [
-    //     {'display':'DAI', 'key': 'dai'},
-    //     // {'display':'ETH', 'key': 'eth'},
-    //     {'display':'USDC', 'key': 'usdc'},
-    //     // {'display':'USDT', 'key': 'usdt'},
-    //     // {'display':'ZRX', 'key': 'zrx'}
-    //   ],
-    //   greenwoodAddresses: {
-    //     'dai': '0xfC98090Aa5833bD553632fcad2294f749f468e67',
-    //     // 'eth': '',
-    //     'usdc': '0xee0433dF093b06930D8c6Efe3037C6B09E296b22',
-    //     // 'usdt': '0xBc5239e4B4A4aEfBF0581E557c85D598Ad28Aeaa',
-    //     // 'zrx': '',
-    //   },
-    //   calculatorAddresses: {
-    //     'dai': '0xE3047997Cd548806894ECcA7Caf6aBaeB083E5c7',
-    //     // 'eth': '',
-    //     'usdc': '0x88561ee4889Afaed59C7E2594D0E0A9288C5C740',
-    //     // 'usdt': '0x2631c2F151CD32Af4a8821b44DD1f8DBb3eBB40a',
-    //     // 'zrx': '',
-    //   },
-    //   metricAddresses: {
-    //     'dai': '0x80900735011E3c8bb27c194948481D80aDEe2cEe',
-    //     // 'eth': '',
-    //     'usdc': '0x72398e2845dB11c03ACAD52A536652E44f7B7641',
-    //     // 'usdt': '0xd7B579A93b8B2be035827696b132301BBFdA6B68',
-    //     // 'zrx': '',
-    //   },
-    //   underlyingAddresses: {
-    //     'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
-    //     // 'eth': '',
-    //     'usdc': '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    //     // 'usdt': '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-    //     // 'zrx': '',
-    //   },
-    //   underlyingABIs: {
-    //     'dai': daiAbi,
-    //     'usdc': erc20m,
-    //     // 'usdt': erc20m
-    //   },
-    //   greenwoodABIs: {
-    //     'dai': coreAbi['abi'],
-    //     'usdc': coreAbi['abi'],
-    //     // 'usdt': coreAbiUsdt['abi']
-    //   },
-    //   cTokenABIs: {
-    //     'dai': cDai,
-    //     'usdc': cUsdc,
-    //     // 'usdt': cUsdt
-    //   },
-    //   assetMantissas: {
-    //     'dai': '1000000000000000000',
-    //     // 'eth': '1000000000000000000',
-    //     'usdc': '1000000',
-    //     // 'usdt': '1000000',
-    //     // 'zrx': '1000000000000000000',
-    //   },
-    //   cTokenAddresses: {
-    //     '1': {
-    //       'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-    //       'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
-    //       'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
-    //       'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
-    //       'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
-    //       'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
-    //       'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
-    //       'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
-    //       'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
-    //     },
-    //     '42': {
-    //       'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
-    //       'bat': '0x4a77faee9650b09849ff459ea1476eab01606c7a',
-    //       'eth': '0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72',
-    //       'rep': '0xa4ec170599a1cf87240a35b9b1b8ff823f448b57',
-    //       'sai': '0xb3f7fb482492f4220833de6d6bfcc81157214bec',
-    //       'usdc': '0x4a92e71227d294f041bd82dd8f78591b75140d63',
-    //       'usdt': '0x3f0a0ea2f86bae6362cf9799b523ba06647da018',
-    //       'wbtc': '0xa1faa15655b0e7b6b6470ed3d096390e6ad93abb',
-    //       'zrx': '0xaf45ae737514c8427d373d50cd979a242ec59e5a',
-    //     }  
-    //   },
-    //   contractShift: 0.0000000001,
-    //   swapDetailRate: '',
-    //   swapDetailMaturity: '',
-    //   swapDetailFee: '',
-    //   swapDetailCollateral: '',
-    //   poolDetailBalance: '',
-    //   poolDetailShare: '',
-    //   renderRoute: false,
-    //   accountSwaps: [],
-    //   historyColumns: [
-    //     {
-    //       swapType: 'Swap Type',
-    //       userCollateral: 'Collateral Locked',
-    //       expiryTime: 'Time Until Expiry',
-    //       currentProfit: 'Approximate Current Profit', 
-    //       liquidationTime: 'Time Until Liquidation'
-    //     }
-    //   ],
-    //   renderTable: false,
-    //   transactionStatus: 'Pending',
-    //   transactionHash: '',
-    //   approvalStatus: 'Pending',
-    //   approvalHash: '',
-    //   isDesktop: false,
-    //   approveRadio: false,
-    //   swapDurationInSeconds: 604800,
-    //   isValidCollateralAmount: true,
-    //   isValidLiquidityAmount: true,
-    //   isOnSupportedNetwork: false
-    // }
-
-    // DEMO OLD
-    // this.state = {
-    //   route: '',
-    //   currentAccount: '',
-    //   currentAccountTruncated: '',
-    //   fetching: false,
-    //   address: "",
-    //   web3: null,
-    //   provider: null,
-    //   connected: false,
-    //   chainId: 1,
-    //   networkId: 1,
-    //   assets: [],
-    //   showModal: false,
-    //   pendingRequest: false,
-    //   result: null,
-    //   setState: this.stateUpdate,
-    //   onConnect: this.onConnect,
-    //   getHistory: this.getHistory,
-    //   subscribeProvider: this.subscribeProvider,
-    //   smartTrim: this.smartTrim,
-    //   getAccountAssets: this.getAccountAssets,
-    //   selectedSwapPosition: 'rFix',
-    //   selectedSwapAmount: '100',
-    //   selectedSwapAsset: 'dai',
-    //   selectedLiquidityAction: 'Supply',
-    //   selectedLiquidityAmount: '100',
-    //   selectedLiquidityAsset: 'dai',
-    //   positions: [ 
-    //     {'display':'Receive', 'key': 'rFix'},
-    //     {'display':'Pay', 'key': 'pFix'} 
-    //   ],
-    //   actions: [ 
-    //     {'display':'Supply', 'key': 'Supply'},
-    //     {'display':'Withdraw', 'key': 'Withdraw'}
-    //   ],
-    //   greenwoodAssets: [
-    //     {'display':'DAI', 'key': 'dai'},
-    //     // {'display':'ETH', 'key': 'eth'},
-    //     // {'display':'USDC', 'key': 'usdc'},
-    //     {'display':'USDT', 'key': 'usdt'},
-    //     // {'display':'ZRX', 'key': 'zrx'}
-    //   ],
-    //   greenwoodAddresses: {
-    //     'dai': '0x08E0d98C08E581FAF891d45Be83Efd456dc4624F',
-    //     // 'eth': '',
-    //     // 'usdc': '',
-    //     'usdt': '0xc7AdEbb0D98c911E19C619055699c8a387FE3b09',
-    //     // 'zrx': '',
-    //   },
-    //   calculatorAddresses: {
-    //     'dai': '0xd6e61386F95FC8A7D7aE3b5fa1b9874D1FFa8026',
-    //     // 'eth': '',
-    //     // 'usdc': '',
-    //     'usdt': '0xBC7a4bEDf19Df5B0b81B3eEE5368e278f7928E7E',
-    //     // 'zrx': '',
-    //   },
-    //   metricAddresses: {
-    //     'dai': '0x0e47c685391F0eAbaEC17D13bA6f13e32d3492d4',
-    //     // 'eth': '',
-    //     // 'usdc': '',
-    //     'usdt': '0xDAE4c55f60F79459D65B31061E65185fc138d1AA',
-    //     // 'zrx': '',
-    //   },
-    //   underlyingAddresses: {
-    //     'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
-    //     // 'eth': '',
-    //     // 'usdc': '',
-    //     'usdt': '0x07de306FF27a2B630B1141956844eB1552B956B5',
-    //     // 'zrx': '',
-    //   },
-    //   underlyingABIs: {
-    //     'dai': daiAbi,
-    //     'usdt': erc20m
-    //   },
-    //   greenwoodABIs: {
-    //     'dai': coreAbi['abi'],
-    //     'usdc': coreAbi['abi'],
-    //     'usdt': coreAbiUsdt['abi']
-    //   },
-    //   cTokenABIs: {
-    //     'dai': cDai,
-    //     'usdc': cUsdc,
-    //     'usdt': cUsdt
-    //   },
-    //   assetMantissas: {
-    //     'dai': '1000000000000000000',
-    //     'eth': '1000000000000000000',
-    //     'usdc': '1000000',
-    //     'usdt': '1000000',
-    //     'zrx': '1000000000000000000',
-    //   },
-    //   cTokenAddresses: {
-    //     '1': {
-    //       'dai': '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',
-    //       'bat': '0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e',
-    //       'eth': '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',
-    //       'rep': '0x158079ee67fce2f58472a96584a73c7ab9ac95c1',
-    //       'sai': '0xf5dce57282a584d2746faf1593d3121fcac444dc',
-    //       'usdc': '0x39aa39c021dfbae8fac545936693ac917d5e7563',
-    //       'usdt': '0xf650c3d88d12db855b8bf7d11be6c55a4e07dcc9',
-    //       'wbtc': '0xc11b1268c1a384e55c48c2391d8d480264a3a7f4',
-    //       'zrx': '0xb3319f5d18bc0d84dd1b4825dcde5d5f7266d407',
-    //     },
-    //     '42': {
-    //       'dai': '0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad',
-    //       'bat': '0x4a77faee9650b09849ff459ea1476eab01606c7a',
-    //       'eth': '0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72',
-    //       'rep': '0xa4ec170599a1cf87240a35b9b1b8ff823f448b57',
-    //       'sai': '0xb3f7fb482492f4220833de6d6bfcc81157214bec',
-    //       'usdc': '0x4a92e71227d294f041bd82dd8f78591b75140d63',
-    //       'usdt': '0x3f0a0ea2f86bae6362cf9799b523ba06647da018',
-    //       'wbtc': '0xa1faa15655b0e7b6b6470ed3d096390e6ad93abb',
-    //       'zrx': '0xaf45ae737514c8427d373d50cd979a242ec59e5a',
-    //     }  
-    //   },
-    //   contractShift: 0.0000000001,
-    //   swapDetailRate: '',
-    //   swapDetailMaturity: '',
-    //   swapDetailFee: '',
-    //   swapDetailCollateral: '',
-    //   poolDetailBalance: '',
-    //   poolDetailShare: '',
-    //   renderRoute: false,
-    //   accountSwaps: [],
-    //   historyColumns: [
-    //     {
-    //       swapType: 'Swap Type',
-    //       userCollateral: 'Collateral Locked',
-    //       expiryTime: 'Time Until Expiry',
-    //       currentProfit: 'Approximate Current Profit', 
-    //       liquidationTime: 'Time Until Liquidation'
-    //     }
-    //   ],
-    //   renderTable: false,
-    //   transactionStatus: 'Pending',
-    //   transactionHash: '',
-    //   approvalStatus: 'Pending',
-    //   approvalHash: '',
-    //   isDesktop: false,
-    //   approveRadio: false,
-    //   swapDurationInSeconds: 60,
-    //   isValidCollateralAmount: true,
-    //   isValidLiquidityAmount: true,
-    //   isOnSupportedNetwork: false
-    // }
-
-
-    // DEMO NEW
     this.state = {
       route: '',
       currentAccount: '',
@@ -424,31 +128,31 @@ class App extends React.Component {
         // {'display':'ZRX', 'key': 'zrx'}
       ],
       greenwoodAddresses: {
-        'dai': '0x3266fa2De1E5Ba77984FF87B87661fd4b3ae49fA',
+        'dai': '0xfC98090Aa5833bD553632fcad2294f749f468e67',
         // 'eth': '',
-        'usdc': '0x4f537Ba14De27977669A32D9B4b171b346c8B8Af',
-        'usdt': '0x6635758839b5405F1FBDf581F442DEd3E0222C5e',
+        'usdc': '0xee0433dF093b06930D8c6Efe3037C6B09E296b22',
+        'usdt': '0xBE66A7Fa1D8fCb3DA2eE721829234174D974f092',
         // 'zrx': '',
       },
       calculatorAddresses: {
-        'dai': '0xcCEb7D8491df90095659F8624daDAf53dF8367Bb',
+        'dai': '0xE3047997Cd548806894ECcA7Caf6aBaeB083E5c7',
         // 'eth': '',
-        'usdc': '0x848873e87A629Be8811dC5c67C060b5C9634Ef77',
-        'usdt': '0xeE2f5C3aA067a324CEB1031b25DD6F93DDB29982',
+        'usdc': '0x88561ee4889Afaed59C7E2594D0E0A9288C5C740',
+        'usdt': '0xDbbC31CAac3d20e4F0bc8D0FC55B0CD2F07063D9',
         // 'zrx': '',
       },
       metricAddresses: {
-        'dai': '0x7b319DfAf3A5f5744cB03d267376dd39624b5575',
+        'dai': '0x80900735011E3c8bb27c194948481D80aDEe2cEe',
         // 'eth': '',
-        'usdc': '0x8B5212d7898Da1B648E19Da306F4A9310E34ce86',
-        'usdt': '0xF43f92A01F8D428947bF9fefCE2A84FE84eCE7Ae',
+        'usdc': '0x72398e2845dB11c03ACAD52A536652E44f7B7641',
+        'usdt': '0xbb45f12e89AeEcaE44Ae9031DAC69d386177F62A',
         // 'zrx': '',
       },
       underlyingAddresses: {
-        'dai': '0xC4375B7De8af5a38a93548eb8453a498222C4fF2',
+        'dai': '0x6b175474e89094c44da98b954eedeac495271d0f',
         // 'eth': '',
-        'usdc': '0xb7a4f3e9097c08da09517b5ab877f7a917224ede',
-        'usdt': '0x07de306ff27a2b630b1141956844eb1552b956b5',
+        'usdc': '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        'usdt': '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         // 'zrx': '',
       },
       underlyingABIs: {
@@ -468,10 +172,10 @@ class App extends React.Component {
       },
       assetMantissas: {
         'dai': '1000000000000000000',
-        'eth': '1000000000000000000',
+        // 'eth': '1000000000000000000',
         'usdc': '1000000',
         'usdt': '1000000',
-        'zrx': '1000000000000000000',
+        // 'zrx': '1000000000000000000',
       },
       cTokenAddresses: {
         '1': {
@@ -522,7 +226,7 @@ class App extends React.Component {
       approvalHash: '',
       isDesktop: false,
       approveRadio: false,
-      swapDurationInSeconds: 60,
+      swapDurationInSeconds: 604800,
       isValidCollateralAmount: true,
       isValidLiquidityAmount: true,
       isOnSupportedNetwork: false,
@@ -599,7 +303,7 @@ class App extends React.Component {
     }
 
     let isOnSupportedNetwork;
-    if (this.state.chainId && (this.state.chainId === '42' || this.state.chainId === 42)) {
+    if (this.state.chainId && (this.state.chainId === '1' || this.state.chainId === 1)) {
       isOnSupportedNetwork = true
     } else {
       isOnSupportedNetwork = false
@@ -650,7 +354,7 @@ class App extends React.Component {
       const currentAccountTruncated = this.smartTrim(address, 16) + ' '
 
       let isOnSupportedNetwork;
-      if (chainId && (chainId === '42' || chainId === 42)) {
+      if (chainId && (chainId === '1' || chainId === 1)) {
         isOnSupportedNetwork = true
       } else {
         isOnSupportedNetwork = false
@@ -704,7 +408,7 @@ class App extends React.Component {
         const chainId = await web3.eth.chainId();
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -751,7 +455,7 @@ class App extends React.Component {
 
         const currentAccountTruncated = this.smartTrim(address, 16) + ' '
         let isOnSupportedNetwork;
-        if (chainId && (chainId === '42' || chainId === 42)) {
+        if (chainId && (chainId === '1' || chainId === 1)) {
           isOnSupportedNetwork = true
         } else {
           isOnSupportedNetwork = false
@@ -1034,8 +738,8 @@ class App extends React.Component {
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              // const getLiquidationTime = startTime + 7200
-                              const getLiquidationTime = startTime + 120
+                              const getLiquidationTime = startTime + 7200
+                              // const getLiquidationTime = startTime + 120
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 
