@@ -618,51 +618,6 @@ class App extends React.Component {
                 console.error(`Error fetching borrow rate from calculator contract- ${e.message}`);
             }
 
-            // try {
-            //     const address = this.state.cTokenAddresses[this.state.chainId][asset.key]
-            //     const instance = new web3.eth.Contract(cDai, address);
-            //     const borrowRatePerBlock = await instance.methods.borrowRatePerBlock().call();
-            //     const ethMantissa = 1e18;
-            //     const blocksPerDay = 4 * 60 * 24;
-
-            //     let borrowRateOverMantissa = borrowRatePerBlock / ethMantissa;
-            //     borrowRateOverMantissa = this.vyperTruncate(borrowRateOverMantissa)
-
-            //     let mulBlocksPerDay = borrowRateOverMantissa * blocksPerDay
-            //     mulBlocksPerDay = this.vyperTruncate(mulBlocksPerDay)
-
-            //     const t0 = mulBlocksPerDay + 1
-
-            //     let t0Squared = t0 * t0
-            //     t0Squared = this.vyperTruncate(t0Squared)
-
-            //     let t1 = t0Squared
-
-            //     Array.from(Array(362).keys()).forEach(() => {
-            //       let innerMul = t1 * t0
-            //       innerMul = this.vyperTruncate(innerMul)
-            //       t1 = innerMul
-            //     });
-
-            //     let t2 = t1 - 1
-            //     t2 = this.vyperTruncate(t2)
-
-            //     let t3 = t2 * 100
-            //     t3 = this.vyperTruncate(t3)
-
-            //     borrowApy = t3
-
-
-            //     // console.log( 't0: ', t0 )
-            //     // console.log( 't1: ', t1 )
-            //     // console.log( 't2: ', t2 )
-            //     // console.log( 't3: ', t3 )
-            //     // console.log( 'BORROW RATE PER BLOCK:', borrowRatePerBlock );
-            //     // console.log( 'BORROW APY:', borrowApy );
-            // } catch (e) {
-            //     console.error(`Error fetching borrow rate from Compound contract- ${e.message}`);
-            // }
-
             let borrowIndex
             try {
               const ethMantissa = 1e18;
