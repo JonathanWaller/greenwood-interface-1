@@ -738,8 +738,8 @@ class App extends React.Component {
 
                             } else {
                               const startTime = (parseInt(Number(swap.initTime) * this.state.contractShift) + Number(this.state.swapDurationInSeconds))
-                              // const getLiquidationTime = startTime + 7200
-                              const getLiquidationTime = startTime + 120
+                              const getLiquidationTime = startTime + 7200
+                              // const getLiquidationTime = startTime + 120
                               const currentTime = moment().unix()
                               const duration = getLiquidationTime - currentTime
 
