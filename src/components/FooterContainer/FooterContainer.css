@@ -67,7 +67,7 @@ and (-webkit-min-device-pixel-ratio: 3) {
 }
 
 .filled-footer-landing-image {
-    color: #66676F;
+    color: #D4D5D8;
     height: 24px;
 }
 
@@ -77,7 +77,7 @@ and (max-device-width: 812px)
 and (-webkit-min-device-pixel-ratio: 3) { 
     .filled-footer-landing-image {
         height: 20px;
-        color: #66676F; 
+        color: #D4D5D8; 
     }
 }
 

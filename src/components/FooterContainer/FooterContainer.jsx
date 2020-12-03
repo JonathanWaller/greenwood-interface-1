@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { GitHub, Twitter } from 'react-feather';
 import './FooterContainer.css'
-import discord from '../../assets/images/discord_icon.png';
+import discord from '../../assets/images/discord_icon_light.png';
 export default class FooterContainer extends Component { 
   constructor(props) {
     super(props);    
